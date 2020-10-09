@@ -1,0 +1,42 @@
+{"properties": [
+  {
+    "name": "weather.api_key",
+    "type": "java.lang.String",
+    "description": "A description for 'weather.api-key'"
+  },
+  {
+    "name": "weather.pos_x",
+    "type": "java.lang.String",
+    "description": "A description for 'weather.pos_x'"
+  },
+  {
+    "name": "weather.pos_y",
+    "type": "java.lang.String",
+    "description": "A description for 'weather.pos_y'"
+  },
+  {
+    "name": "iot.server-ip",
+    "type": "java.lang.String",
+    "description": "A description for 'iot.server-ip'"
+  },
+  {
+    "name": "iot.server-port",
+    "type": "java.lang.String",
+    "description": "A description for 'iot.server-port'"
+  },
+  {
+    "name": "iot.external-sys-id",
+    "type": "java.lang.String",
+    "description": "A description for 'iot.external-sys-id'"
+  },
+  {
+    "name": "iot.device-id",
+    "type": "java.lang.String",
+    "description": "A description for 'iot.device-id'"
+  },
+  {
+    "name": "iot.password",
+    "type": "java.lang.String",
+    "description": "A description for 'iot.password'"
+  }
+]}

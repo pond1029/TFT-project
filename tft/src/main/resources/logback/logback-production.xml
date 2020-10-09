@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="ROLLING"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/jb_log/app/pact-weather/pact-weather.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>/jb_log/app/pact-weather/pact-weather-%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>5</maxHistory>
+			<totalSizeCap>5GB</totalSizeCap> 
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>	
+
+	<logger name="org.springframework" level="info" additivity="false">
+		<appender-ref ref="ROLLING" />
+	</logger>
+
+	<logger name="org.pact" level="info" additivity="false">
+		<appender-ref ref="ROLLING" />
+	</logger>
+
+  <logger name="jdbc" level="OFF"/>
+
+  <logger name="jdbc.sqlonly" level="DEBUG" additivity="false">>
+    <appender-ref ref="ROLLING" />
+  </logger>  
+  
+  <logger name="jdbc.resultsettable" level="DEBUG" additivity="false">> 
+    <appender-ref ref="ROLLING" />
+  </logger>  	
+    
+	<root level="debug">
+		<appender-ref ref="ROLLING" />
+	</root>
+
+</configuration>
