@@ -4,6 +4,8 @@ package com.jylee.tft.dao;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +31,8 @@ public class Participants {
 	private Long totalDamageToPlayers;
 	private String playersGameTime;
 	private String puuid;
+	@ManyToOne
+	@JoinColumn(name = "matchId")
 	private String matchId;
 	
 }
