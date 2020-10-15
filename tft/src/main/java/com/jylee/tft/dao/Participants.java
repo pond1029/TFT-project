@@ -31,8 +31,8 @@ public class Participants {
 	private Long totalDamageToPlayers;
 	private String playersGameTime;
 	private String puuid;
-	@ManyToOne
-	@JoinColumn(name = "matchId")
-	private String matchId;
+	@ManyToOne(targetEntity = MatchInfo.class)
+	@JoinColumn(name = "match_id")
+	private MatchInfo matchInfo;
 	
 }

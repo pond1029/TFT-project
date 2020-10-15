@@ -30,6 +30,6 @@ public class MatchInfo {
 	private String gameVariation;
 	private String gameVersion;	
 	
-	@OneToMany(mappedBy = "matchId")
+	@OneToMany(mappedBy = "matchInfo")
 	private Set<Participants> participantLists = new LinkedHashSet<>();
 }

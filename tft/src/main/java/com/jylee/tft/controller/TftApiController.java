@@ -33,7 +33,6 @@ public class TftApiController {
 		
 		ModelAndView modelAndView = new ModelAndView("/tft");
 		
-		
 		return modelAndView;
 	}
 

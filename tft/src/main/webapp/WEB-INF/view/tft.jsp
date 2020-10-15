@@ -91,26 +91,25 @@ function send(){
 }
 
 function draw(playInfo){
-	var participantLists = playInfo.participantLists;
+	var playTimeLists = playInfo.playTimeLists;
+	var totalSeconds = playInfo.totalPlayTime;
 	var data = [];
 	var labels = [];
 	var backgroundColor = [];
-	
 	var summery = document.getElementById('summery');
 	summery.innerHTML = "";
-	
-	var totalPlayTime = document.createTextNode('totalPlayTime:330H 20M 32S');
+	var totalPlayTime = document.createTextNode('총 플레이 시간 : '+Math.round(totalSeconds/60) + '분');
 	summery.appendChild(totalPlayTime);
 	summery.appendChild(document.createElement("br"));
 	
-	for(var i = 0; i < participantLists.length; i++){
-		data.push(Math.round(participantLists[i].timeEliminated/60));
-		if(participantLists[i].timeEliminated/60 > 30){
+	for(var i = 0; i < playTimeLists.length; i++){
+		data.push(Math.round(playTimeLists[i].seconds/60));
+		if(playTimeLists[i].seconds/60 > 300){
 			backgroundColor.push('#fe4365');
 		}else{
 			backgroundColor.push('#30A9DE');
 		}
-		labels.push(participantLists[i].matchId);
+		labels.push(playTimeLists[i].date);
 	}
 	
 	var chart = document.createElement("canvas");
