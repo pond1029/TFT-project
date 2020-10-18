@@ -11,7 +11,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>이재연의 TFT</title>
+<title>Project TFT</title>
 
 <!-- Bootstrap core CSS -->
 <link href="/resources/vendor/bootstrap/css/bootstrap.min.css"
@@ -21,8 +21,9 @@
 <!-- Chart.js -->
 <script type="text/javascript" src="/resources/js/Chart.js" ></script> 
 <script type="text/javascript" src="/resources/js/Chart.min.js" ></script> 
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/resources/vendor/jquery/jquery.min.js"></script>
+<script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 
 <style type="text/css">
 .parent {
@@ -42,7 +43,7 @@
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">SIMULATION</a>
+			<a class="navbar-brand" href="main.do">Project TFT</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarResponsive" aria-controls="navbarResponsive"
 				aria-expanded="false" aria-label="Toggle navigation">
@@ -51,12 +52,15 @@
 
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a class="nav-link" href="main.do">Home
-							<span class="sr-only">(current)</span>
-					</a></li>
-					<li class="nav-item"><a class="nav-link" href="simulation.do">Simulaion</a>
+					<li class="nav-item">
+						<a class="nav-link" href="main.do">
+							Home
+						</a>
 					</li>
-					<li class="nav-item"><a class="nav-link" href="#">Contact</a>
+					<li class="nav-item active">
+						<a class="nav-link" href="simulation.do">
+							Simulaion<span class="sr-only">(current)</span>
+						</a>
 					</li>
 				</ul>
 			</div>
@@ -65,6 +69,7 @@
 
 	<!-- Page Content -->
 	<div class="container" style="width: 90vw; height: 90vh;">
+	<div class="map" style="width: 50vw; height: 50vh;" >
 
 		<div id="row1" class="parent" style="width: 750px; height: 100px;">
 		    <div id="col11" ondrop="drop(event)" ondragover="allowDrop(event)" class="child" style="background: #A5ECD7;"></div>
@@ -109,6 +114,7 @@
 		    <div id="col46" ondrop="drop(event)" ondragover="allowDrop(event)" class="child" style="background: #E8FFC1;"></div>
 		    <div id="col47" ondrop="drop(event)" ondragover="allowDrop(event)" class="child" style="background: #51ADCF;"></div>
 		</div>
+		</div>
 	<!-- <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)" style = "border: solid; width: 100px; height: 100px"></div>
 	<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)" style = "border: solid; width: 100px; height: 100px"></div>
 	 -->
@@ -122,7 +128,7 @@
 	</div>
 	<!-- /.container -->
 	<!-- Footer -->
-	<footer class="py-5 bg-dark">
+	<footer class="py-2 bg-dark">
 		<div class="container">
 			<p class="m-0 text-center text-white">Copyright &copy; 이재연 2020</p>
 		</div>

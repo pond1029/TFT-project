@@ -11,7 +11,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>이재연의 TFT</title>
+<title>Project TFT</title>
 
 <!-- Bootstrap core CSS -->
 <link href="/resources/vendor/bootstrap/css/bootstrap.min.css"
@@ -21,8 +21,8 @@
 <!-- Chart.js -->
 <script type="text/javascript" src="/resources/js/Chart.js" ></script> 
 <script type="text/javascript" src="/resources/js/Chart.min.js" ></script> 
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/resources/vendor/jquery/jquery.min.js"></script>
+<script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -30,7 +30,8 @@
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">이재연은 TFT를 얼마나 했을까?</a>
+			<a class="navbar-brand" href="main.do">Project TFT</a>
+			
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarResponsive" aria-controls="navbarResponsive"
 				aria-expanded="false" aria-label="Toggle navigation">
@@ -44,8 +45,6 @@
 					</a></li>
 					<li class="nav-item"><a class="nav-link" href="simulation.do">Simulaion</a>
 					</li>
-					<li class="nav-item"><a class="nav-link" href="#">Contact</a>
-					</li>
 				</ul>
 			</div>
 		</div>
@@ -56,14 +55,14 @@
 		<h1 id="summonerId" style="cursor: pointer;">야 방금 무빙봤냐</h1>
 		<p id="summery"></p>
 		
-		<div id="chartContainer"class="chart-container" style="position:relative; height:80vh; width:70vw;">
+		<div id="chartContainer" class="chart-container" style="position:relative; height:70vh; width:70vw;">
 			<canvas id="chart"></canvas>	
 		</div>
 		
 	</div>
 	<!-- /.container -->
 	<!-- Footer -->
-	<footer class="py-5 bg-dark">
+	<footer class="py-2 bg-dark">
 		<div class="container">
 			<p class="m-0 text-center text-white">Copyright &copy; 이재연 2020</p>
 		</div>

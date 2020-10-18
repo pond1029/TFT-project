@@ -8,12 +8,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-/**
- * Json 유틸
- * 
- * @author 김종현
- *
- */
 public class JsonUtil {
 	
 	/**
