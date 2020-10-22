@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
+import com.jylee.tft.dao.ApiInformation;
 import com.jylee.tft.dao.MatchesAndPuuids;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,9 +44,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ApiManager {
 
-	private static final String serviceUrl = "https://asia.api.riotgames.com";
-	private static final String apiKey = "RGAPI-2aa891a6-f261-4684-ba62-f48e4078603f";
-
+	@Autowired
+	ApiInformation apiInformation;
+	
 	@Autowired
 	MatchesAndPuuidsService matchesAndPuuidsService;
 
@@ -85,7 +86,7 @@ public class ApiManager {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
 		String apiUrl = "/tft/match/v1/matches/by-puuid/" + puuid + "/ids?count=29";
-		ResponseEntity<String> userRsp = sendRest(serviceUrl, apiUrl, parameters);
+		ResponseEntity<String> userRsp = sendRest(apiInformation.getUrl(), apiUrl, parameters);
 		String[] body = gson.fromJson(userRsp.getBody(), String[].class);
 		
 		return Arrays.asList(body);
@@ -95,7 +96,7 @@ public class ApiManager {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
 		String apiUrl = "/tft/match/v1/matches/" + matchId;
-		ResponseEntity<String> response = sendRest(serviceUrl, apiUrl, parameters);		
+		ResponseEntity<String> response = sendRest(apiInformation.getUrl(), apiUrl, parameters);		
 		Map<String, Object> bodyMap = gson.fromJson(response.getBody(), Map.class);
 		return bodyMap;
 	}
@@ -104,13 +105,9 @@ public class ApiManager {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders headers = new HttpHeaders();
-			headers.add("User-Agent",
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36");
-			headers.add("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
 			headers.add("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
-			headers.add("Origin", "https://developer.riotgames.com");
 			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-			headers.add("X-Riot-Token", apiKey);
+			headers.add("X-Riot-Token", apiInformation.getKey());
 			HttpEntity<Map<String, Object>> request = new HttpEntity<>(parameters, headers);
 			ResponseEntity<String> response = restTemplate.exchange(restUrl + url, HttpMethod.GET, request,
 					String.class);

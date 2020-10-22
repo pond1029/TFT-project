@@ -3,6 +3,7 @@ package com.jylee.tft.boot;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import com.jylee.tft.dao.ApiInformation;
 
 @SpringBootApplication
 @ComponentScan(basePackages="com.jylee.tft")
@@ -24,6 +27,9 @@ public class TftSpringBootApplication extends SpringBootServletInitializer imple
 	@PersistenceContext
 	EntityManager entityManager;
 	  
+	@Autowired
+	ApiInformation apiInformation;
+	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		return builder.sources(TftSpringBootApplication.class);
@@ -36,7 +42,6 @@ public class TftSpringBootApplication extends SpringBootServletInitializer imple
 
 	@Override
 	public void run(String... args) throws Exception {
-		
 	}	
 
 }

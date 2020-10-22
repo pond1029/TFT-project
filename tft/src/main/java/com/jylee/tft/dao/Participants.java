@@ -35,4 +35,8 @@ public class Participants {
 	@JoinColumn(name = "match_id")
 	private MatchInfo matchInfo;
 	
+	public String getGameDate() {
+		return matchInfo.getGameDate();
+	}
+	
 }
