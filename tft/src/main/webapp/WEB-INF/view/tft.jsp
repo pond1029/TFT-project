@@ -52,8 +52,20 @@
 
 	<!-- Page Content -->
 	<div class="container" style="width: 90vw; height: 90vh;">
-		<h1 id="summonerId" style="cursor: pointer;">야 방금 무빙봤냐</h1>
+		<div>
+		<label id="summonerId" style="cursor: pointer; font-size: xx-large;">야 방금 무빙봤냐</label>
+		<button id="update" onclick="update()">갱신</button>
+		
+		</div>
 		<p id="summery"></p>
+		<div id="date">
+		<button onclick="getDate(-1)"> < </button>
+		<label id="year">2020</label> - <label id="month">09</label>
+		
+		<button onclick="getDate(1)"> > </button>
+		</div>
+		<div>
+		</div>
 		
 		<div id="chartContainer" class="chart-container" style="position:relative; height:70vh; width:70vw;">
 			<canvas id="chart"></canvas>	
@@ -74,12 +86,73 @@
 
 <script type="text/javascript">
 
-window.onload = send();
+init();
+
+function init(){
+	initDate();
+	send();
+}
+
+function update(){
+
+	var summonerId = document.getElementById("summonerId").innerHTML;	
+	
+	fetch('http://localhost:8080/tft/update?summonerId=' + summonerId,{
+			method: 'GET',
+			headers:{
+				'Content-Type':'application/json'
+			}
+		});	
+}
+
+function initDate(){
+	let date = new Date();
+
+	var year = document.getElementById('year');
+	year.innerHTML = "";
+	var pickedYear = document.createTextNode(date.getFullYear());
+	year.appendChild(pickedYear);
+
+
+	var month = document.getElementById('month');
+	month.innerHTML = "";
+	var pickedMonth = document.createTextNode(date.getMonth() + 1);
+	month.appendChild(pickedMonth);
+}
+
+function getDate(move){
+
+	var year = document.getElementById('year');
+	var month = document.getElementById('month');
+
+	let date = new Date(year.innerHTML, month.innerHTML - 1);
+	
+	if(move > 0){
+		date.setMonth( date.getMonth() + 1);
+	}else{
+		date.setMonth( date.getMonth() - 1);
+	}
+
+	year.innerHTML = "";
+	var pickedYear = document.createTextNode(date.getFullYear());
+	year.appendChild(pickedYear);
+
+
+	month.innerHTML = "";
+	var pickedMonth = document.createTextNode(date.getMonth() + 1);
+	month.appendChild(pickedMonth);
+
+	send();
+}
 
 function send(){
 	var summonerId = document.getElementById("summonerId").innerHTML;	
+	var year = document.getElementById("year").innerHTML;	
+	var month = document.getElementById("month").innerHTML;	
 
-	fetch('http://localhost:8080/tft/playInfo?summonerId=' + summonerId,{
+	var params = 'year=' + year + '&month=' + month + '&summonerId=' + summonerId;
+	
+	fetch('http://localhost:8080/tft/playInfo?' + params,{
 			method: 'GET',
 			headers:{
 				'Content-Type':'application/json'
@@ -126,7 +199,15 @@ function draw(playInfo){
 	        }]
 	    },
 	    options: {
-	    	maintainAspectRatio:false 
+	    	maintainAspectRatio:false,
+	    	scales:{ 
+		    	yAxes: [{
+		                display: true,
+		                ticks: {
+		                    beginAtZero: true
+		                }
+			    }]
+			}
 	    }
 	});
 

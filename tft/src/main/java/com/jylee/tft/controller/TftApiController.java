@@ -1,8 +1,7 @@
 package com.jylee.tft.controller;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,9 +42,9 @@ public class TftApiController {
 	}
 
 	@RequestMapping(value="/playInfo", method = RequestMethod.GET)
-	public PlayStatistics playInfo(@RequestParam String summonerId)
+	public PlayStatistics playInfo(@RequestParam int year, @RequestParam int month, @RequestParam String summonerId)
 	{		
-		PlayStatistics playStatistics = statistic.getPlayStatistics(2020, 9,puuid);
+		PlayStatistics playStatistics = statistic.getPlayStatistics(year, month, puuid);
 
 		return playStatistics;
 	}
@@ -53,7 +52,8 @@ public class TftApiController {
 	@RequestMapping(value="/update", method = RequestMethod.GET)
 	public ResponseEntity update(@RequestParam String summonerId)
 	{  
-		apiManager.update(puuid);	
+		
+		//apiManager.update(puuid);	
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

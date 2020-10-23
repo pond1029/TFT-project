@@ -43,10 +43,9 @@ public class PlayStatistics {
 	public PlayStatistics(int year, int month) {
 		playTimeLists = new ArrayList<PlayTime>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");		
-		Calendar cal = Calendar.getInstance();
-		int last = cal.getActualMaximum(Calendar.DATE);
-		
+		Calendar cal = Calendar.getInstance();		
 		cal.set(year, month - 1 ,1);		
+		int last = cal.getActualMaximum(Calendar.DATE);
 		
 		for(int i = 0; i < last; i++) {
 			String date = sdf.format(cal.getTime());			
