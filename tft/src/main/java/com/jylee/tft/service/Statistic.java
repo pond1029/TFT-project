@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
   * @Date : 2020. 10. 23. 
   * @Author : "LeeJaeYeon"
   * @Version :
-  * @Information :
+  * @Information : 분석
   */
 
 @Slf4j
@@ -42,7 +42,7 @@ public class Statistic {
 	@Autowired
 	ParticipantsService participants;
 		
-	public PlayStatistics getPlayStatistics(int year, int month, String puuid) {
+	public PlayStatistics getPlayTimeStatistics(int year, int month, String puuid) {
 		
 		PlayStatistics playStatistics = new PlayStatistics(year, month);
 

@@ -1,11 +1,9 @@
 package com.jylee.tft.dao;
 
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -31,5 +29,5 @@ public class MatchInfo {
 	private String gameVersion;	
 	
 	@OneToMany(mappedBy = "matchInfo")
-	private Set<Participants> participantLists = new LinkedHashSet<>();
+	private List<Participants> participantLists;
 }

@@ -9,12 +9,11 @@
 
 package com.jylee.tft.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -27,7 +26,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 import com.jylee.tft.dao.ApiInformation;
-import com.jylee.tft.dao.MatchesAndPuuids;
+import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.dao.Participants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,60 +48,37 @@ public class ApiManager {
 	ApiInformation apiInformation;
 	
 	@Autowired
-	MatchesAndPuuidsService matchesAndPuuidsService;
+	Converter converter;
 
-	@Autowired
-	DataManager datamanager;
-	
-	public void update(String puuid) {
-
-		List<String> matchIdList = retrieveMatchId(puuid);
-
-		if (!matchIdList.isEmpty()) {
-			List<MatchesAndPuuids> matchList = matchesAndPuuidsService.getListMatchesAndPuuids(puuid);
-			
-			List<String> dbList = matchList.stream()
-					.map(MatchesAndPuuids::getMatchId)
-					.collect(Collectors.toCollection(ArrayList::new));
-			
-			List<String> insertList = new ArrayList<String>();
-			
-			for(int i = 0; i < matchIdList.size(); i++) {
-				if(!dbList.contains(matchIdList.get(i))) {
-					insertList.add(matchIdList.get(i));
-				}
-			}
-			
-			
-			for (String matchId : insertList) {
-				Map<String, Object> map = retrieveMatchInfo(matchId);
-				matchesAndPuuidsService.setMatchesAndPuuids(matchId, puuid);
-				datamanager.insertMatchInfo(map);
-			}
-			
-		}
-	}
-
-	private List<String> retrieveMatchId(String puuid) {
+	public List<String> retrieveMatchId(String puuid) {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
-		String apiUrl = "/tft/match/v1/matches/by-puuid/" + puuid + "/ids?count=29";
-		ResponseEntity<String> userRsp = sendRest(apiInformation.getUrl(), apiUrl, parameters);
-		String[] body = gson.fromJson(userRsp.getBody(), String[].class);
+		parameters.put("ids", 29);
+		String apiUrl = "/tft/match/v1/matches/by-puuid/" + puuid;
+		
+		String result = send(apiUrl, parameters);
+		String[] body = gson.fromJson(result, String[].class);
 		
 		return Arrays.asList(body);
 	}
 
-	private Map<String, Object> retrieveMatchInfo(String matchId) {
+	public MatchInfo retrieveMatchInfo(String matchId) {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
 		String apiUrl = "/tft/match/v1/matches/" + matchId;
-		ResponseEntity<String> response = sendRest(apiInformation.getUrl(), apiUrl, parameters);		
-		Map<String, Object> bodyMap = gson.fromJson(response.getBody(), Map.class);
-		return bodyMap;
+		String result = send(apiUrl, parameters);
+		
+		Map<String, Object> bodyMap = gson.fromJson(result, Map.class);
+		
+		MatchInfo matchInfo = converter.convertToMatchInfo(bodyMap);
+		List<Participants> participants = converter.convertToParticipantsLists(bodyMap);
+		
+		matchInfo.setParticipantLists(participants);
+		
+		return matchInfo;
 	}
 	
-	public ResponseEntity<String> sendRest(String restUrl, String url, Map<String, Object> parameters) {
+	public ResponseEntity<String> sendRest(String apiUrl, Map<String, Object> parameters) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders headers = new HttpHeaders();
@@ -109,7 +86,7 @@ public class ApiManager {
 			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
 			headers.add("X-Riot-Token", apiInformation.getKey());
 			HttpEntity<Map<String, Object>> request = new HttpEntity<>(parameters, headers);
-			ResponseEntity<String> response = restTemplate.exchange(restUrl + url, HttpMethod.GET, request,
+			ResponseEntity<String> response = restTemplate.exchange(apiInformation.getUrl() + apiUrl, HttpMethod.GET, request,
 					String.class);
 			return response;
 		} catch (Exception e) {
@@ -118,4 +95,38 @@ public class ApiManager {
 		return null;
 	}
 
+
+	public String send(String apiUrl, Map<String, Object> parameters) {
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();			
+			headers.add("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
+			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+			headers.add("X-Riot-Token", apiInformation.getKey());
+			HttpEntity<Map<String, Object>> request = new HttpEntity<>(parameters, headers);
+			String url = urlBuild(apiUrl, parameters);
+			
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request,
+					String.class);			
+			return response.getBody();
+		} catch (Exception e) {
+			log.error("error : {}", e.getMessage());
+		}
+		return null;
+	}
+	
+	private String urlBuild(String apiUrl, Map<String, Object> parameters) {
+		String resultUrl = apiInformation.getUrl() + apiUrl;
+		String params = "";
+		
+		Set<String> keySet = parameters.keySet();			
+		for(String key : keySet) {
+			String param = "&" + key + "=" + parameters.get(key).toString();
+		}
+		if(!params.equals("")) {
+			params = "/" + params.replace("&", "?");			
+		}
+		return resultUrl + params;
+	}
+	
 }

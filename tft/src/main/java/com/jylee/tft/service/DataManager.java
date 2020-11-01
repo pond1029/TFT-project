@@ -9,14 +9,21 @@
 
 package com.jylee.tft.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.dao.MatchesAndPuuids;
 import com.jylee.tft.dao.Participants;
 import com.jylee.tft.util.PondUtil;
 
@@ -28,57 +35,54 @@ import lombok.extern.slf4j.Slf4j;
   * @Date : 2020. 10. 21. 
   * @Author : "LeeJaeYeon"
   * @Version :
-  * @Information :
+  * @Information : 데이터 관리
   */
 
 @Slf4j
 @Service
 public class DataManager {
 
-
 	@Autowired
-	ParticipantsService participants;
+	ParticipantsService participantsService;
 
 	@Autowired
 	MatchInfoService matchInfoService;
-	
-	public List<Object> insertMatchInfo(Map matchData) {
-		Map<String, Object> metaDataMap = (Map<String, Object>) matchData.get("metadata");
-		Map<String, Object> infoMap = (Map<String, Object>) matchData.get("info");
-		List participantLists = (List) infoMap.get("participants");
-		PondUtil pondUtil = new PondUtil();
 
-		PondUtil pu = new PondUtil();
+	@Autowired
+	MatchesAndPuuidsService matchesAndPuuidsService;
+
+	@Autowired
+	ApiManager apiManager;
+
+	public void update(String puuid) {
+
+		List<String> matchIdList = apiManager.retrieveMatchId(puuid);
 		
-		MatchInfo matchInfo = MatchInfo.builder()
-				.gameDatetime(((Double) infoMap.get("game_datetime")).longValue())
-				.gameLength(((Double) infoMap.get("game_length")).longValue())
-				.gameVariation((String) infoMap.get("game_variation"))
-				.gameVersion((String) infoMap.get("game_version"))
-				.gameDate(pondUtil.getUnixToString(((Double) infoMap.get("game_datetime")).longValue()))
-				.matchId((String)metaDataMap.get("match_id"))
-				.build();
-		
-		matchInfoService.setMatchInfo(matchInfo);
+		if (!matchIdList.isEmpty()) {
 
-		Iterator i = participantLists.iterator();
-		while (i.hasNext()) {
-			Map<String, Object> m = (Map<String, Object>) i.next();
-			Participants participant = Participants.builder().goldLeft(((Double) m.get("gold_left")).longValue())
-					.lastRound(((Double) m.get("last_round")).longValue()).level(((Double) m.get("level")).longValue())
-					.placement(((Double) m.get("placement")).longValue())
-					.playersEliminated(((Double) m.get("players_eliminated")).longValue())
-					.timeEliminated(((Double) m.get("time_eliminated")).longValue())
-					.totalDamageToPlayers(((Double) m.get("total_damage_to_players")).longValue())
-					.playersGameTime(pondUtil.getUnixToString(((Double) m.get("time_eliminated")).longValue(), "HH:mm:ss"))
-					.puuid((String) m.get("puuid"))
-					.matchInfo(matchInfo)
-					.build();
-
-			participants.setparticipants(participant);
-
+			List<MatchesAndPuuids> matchList = matchesAndPuuidsService.getListMatchesAndPuuids(puuid);
+			
+			List<String> dbList = matchList.stream()
+					.map(MatchesAndPuuids::getMatchId)
+					.collect(Collectors.toCollection(ArrayList::new));
+			
+			List<String> insertList = new ArrayList<String>();
+			
+			for(int i = 0; i < matchIdList.size(); i++) {
+				if(!dbList.contains(matchIdList.get(i))) {
+					insertList.add(matchIdList.get(i));
+				}
+			}
+						
+			for (String matchId : insertList) {
+				MatchInfo matchInfo = apiManager.retrieveMatchInfo(matchId);
+				matchInfoService.setMatchInfo(matchInfo);
+				participantsService.setparticipants(matchInfo.getParticipantLists());
+				matchesAndPuuidsService.setMatchesAndPuuids(matchId, puuid);
+			}
+			
 		}
-		return null;
 	}
+
 	
 }

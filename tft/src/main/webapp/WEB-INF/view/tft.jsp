@@ -14,11 +14,8 @@
 <title>Project TFT</title>
 
 <!-- Bootstrap core CSS -->
-<link href="/resources/vendor/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet">
-<!-- Custom styles for this template -->
+<link href="/resources/vendor/bootstrap/css/bootstrap.min.css"	rel="stylesheet">
 <link href="/resources/css/shop-homepage.css" rel="stylesheet">
-<!-- Chart.js -->
 <script type="text/javascript" src="/resources/js/Chart.js" ></script> 
 <script type="text/javascript" src="/resources/js/Chart.min.js" ></script> 
 <script src="/resources/vendor/jquery/jquery.min.js"></script>
@@ -85,14 +82,9 @@
 </body>
 
 <script type="text/javascript">
-
-init();
-
-function init(){
-	initDate();
-	send();
-}
-
+initDate();
+send();
+	
 function update(){
 
 	var summonerId = document.getElementById("summonerId").innerHTML;	
