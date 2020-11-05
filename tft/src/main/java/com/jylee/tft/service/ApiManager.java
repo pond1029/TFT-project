@@ -53,7 +53,7 @@ public class ApiManager {
 	public List<String> retrieveMatchId(String puuid) {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
-		parameters.put("ids", 29);
+		parameters.put("ids", 999);
 		String apiUrl = "/tft/match/v1/matches/by-puuid/" + puuid;
 		
 		String result = send(apiUrl, parameters);
@@ -78,24 +78,6 @@ public class ApiManager {
 		return matchInfo;
 	}
 	
-	public ResponseEntity<String> sendRest(String apiUrl, Map<String, Object> parameters) {
-		try {
-			RestTemplate restTemplate = new RestTemplate();
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
-			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-			headers.add("X-Riot-Token", apiInformation.getKey());
-			HttpEntity<Map<String, Object>> request = new HttpEntity<>(parameters, headers);
-			ResponseEntity<String> response = restTemplate.exchange(apiInformation.getUrl() + apiUrl, HttpMethod.GET, request,
-					String.class);
-			return response;
-		} catch (Exception e) {
-			log.error("error : {}", e.getMessage());
-		}
-		return null;
-	}
-
-
 	public String send(String apiUrl, Map<String, Object> parameters) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();

@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jylee.tft.dao.PlayStatistics;
 import com.jylee.tft.service.DataManager;
-import com.jylee.tft.service.Statistic;
+import com.jylee.tft.service.TFTService;
+import com.jylee.tft.service.statistic.PlayStatistics;
+import com.jylee.tft.service.statistic.PlayTimeStatistic;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +29,7 @@ public class TftApiController {
 	DataManager dataManager;
 	
 	@Autowired
-	Statistic statistic;
+	TFTService tftService;
 	
 	@ResponseBody
 	@RequestMapping(path="/main.do", produces="text/plain; charset=UTF-8")
@@ -43,7 +44,7 @@ public class TftApiController {
 	@RequestMapping(value="/playInfo", method = RequestMethod.GET)
 	public PlayStatistics playInfo(@RequestParam int year, @RequestParam int month, @RequestParam String summonerId)
 	{		
-		PlayStatistics playStatistics = statistic.getPlayTimeStatistics(year, month, puuid);
+		PlayStatistics playStatistics = tftService.getPlayTimeStatistics(year, month, puuid);
 
 		return playStatistics;
 	}

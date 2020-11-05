@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.jylee.ftf.repository.MatchesAndPuuidsRepository;
 import com.jylee.tft.dao.MatchesAndPuuids;
+import com.jylee.tft.repository.MatchesAndPuuidsRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

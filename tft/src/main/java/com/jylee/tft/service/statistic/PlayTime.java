@@ -7,7 +7,7 @@
   * @Information :
   */
 
-package com.jylee.tft.dao;
+package com.jylee.tft.service.statistic;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

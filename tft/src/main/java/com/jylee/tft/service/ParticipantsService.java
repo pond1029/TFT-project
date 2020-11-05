@@ -6,8 +6,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.jylee.ftf.repository.ParticipantsRepository;
 import com.jylee.tft.dao.Participants;
+import com.jylee.tft.repository.ParticipantsRepository;
 
 import lombok.RequiredArgsConstructor;
 

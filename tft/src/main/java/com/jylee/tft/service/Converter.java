@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.jylee.tft.dao.MatchInfo;
 import com.jylee.tft.dao.Participants;
 import com.jylee.tft.util.PondUtil;
@@ -28,6 +30,7 @@ import com.jylee.tft.util.PondUtil;
   * @Information : 변환
   */
 
+@Service
 public class Converter {
 
 	public MatchInfo convertToMatchInfo(Map map) {

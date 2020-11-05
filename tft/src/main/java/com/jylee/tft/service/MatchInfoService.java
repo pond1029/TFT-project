@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.jylee.ftf.repository.MatchInfoRepository;
 import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.repository.MatchInfoRepository;
 
 import lombok.RequiredArgsConstructor;
 

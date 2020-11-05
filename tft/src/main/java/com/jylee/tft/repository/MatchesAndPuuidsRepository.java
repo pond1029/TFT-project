@@ -1,4 +1,4 @@
-package com.jylee.ftf.repository;
+package com.jylee.tft.repository;
 
 import java.util.List;
 

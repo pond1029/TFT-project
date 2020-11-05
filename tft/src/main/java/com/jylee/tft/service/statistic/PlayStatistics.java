@@ -7,7 +7,7 @@
   * @Information :
   */
 
-package com.jylee.tft.dao;
+package com.jylee.tft.service.statistic;
 
 import java.text.SimpleDateFormat;
 import java.time.Month;
@@ -32,10 +32,7 @@ import lombok.Setter;
   * @Version :
   * @Information :
   */
-
-@Builder
 @Getter @Setter
-@AllArgsConstructor
 public class PlayStatistics {
 
 	private List<PlayTime> playTimeLists;

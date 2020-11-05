@@ -1,4 +1,4 @@
-package com.jylee.ftf.repository;
+package com.jylee.tft.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
