@@ -9,6 +9,11 @@
 
 package com.jylee.tft.boot;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
 /**
   * @Package : com.jylee.tft.boot
   * @FileName : TftSpringBootApplicationTests.java
@@ -18,6 +23,11 @@ package com.jylee.tft.boot;
   * @Information :
   */
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class TftSpringBootApplicationTests {
 
+	  @Test
+	  public void contextLoads() {
+	  }
 }
