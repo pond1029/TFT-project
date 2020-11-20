@@ -22,10 +22,10 @@ public class SummonerInfo {
 	private Long summonerInfoId;
 	private String id;
 	private String accountId;
-	private String puuid;
-	private String name;
 	private Long profileIconId;
 	private Long revisionDate;
+	private String name;
+	private String puuid;
 	private Long summonerLevel;
 	
 }

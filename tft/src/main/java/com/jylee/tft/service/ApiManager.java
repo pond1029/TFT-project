@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.jylee.tft.dao.ApiInformation;
 import com.jylee.tft.dao.MatchInfo;
 import com.jylee.tft.dao.Participants;
+import com.jylee.tft.dao.SummonerInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,13 +51,25 @@ public class ApiManager {
 	@Autowired
 	Converter converter;
 
+	public SummonerInfo retrieveSummonerInfo(String summonerName) {
+		Gson gson = new Gson();
+		Map<String, Object> parameters = new HashMap();
+		String apiUrl = "/tft/summoner/v1/summoners/by-name/" + summonerName;
+		
+		String result = send(apiInformation.getKrUrl() + apiUrl, parameters);
+		Map<String, Object> bodyMap = gson.fromJson(result, Map.class);
+		
+		SummonerInfo summonerInfo = converter.convertToSummonerInfo(bodyMap);
+		return summonerInfo;
+		
+	}
 	public List<String> retrieveMatchId(String puuid) {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
 		parameters.put("ids", 999);
 		String apiUrl = "/tft/match/v1/matches/by-puuid/" + puuid;
 		
-		String result = send(apiUrl, parameters);
+		String result = send(apiInformation.getAsiaUrl() + apiUrl, parameters);
 		String[] body = gson.fromJson(result, String[].class);
 		
 		return Arrays.asList(body);
@@ -66,7 +79,7 @@ public class ApiManager {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
 		String apiUrl = "/tft/match/v1/matches/" + matchId;
-		String result = send(apiUrl, parameters);
+		String result = send(apiInformation.getAsiaUrl() + apiUrl, parameters);
 		
 		Map<String, Object> bodyMap = gson.fromJson(result, Map.class);
 		
@@ -78,7 +91,7 @@ public class ApiManager {
 		return matchInfo;
 	}
 	
-	public String send(String apiUrl, Map<String, Object> parameters) {
+	public String send(String url, Map<String, Object> parameters) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders headers = new HttpHeaders();			
@@ -86,9 +99,9 @@ public class ApiManager {
 			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
 			headers.add("X-Riot-Token", apiInformation.getKey());
 			HttpEntity<Map<String, Object>> request = new HttpEntity<>(parameters, headers);
-			String url = urlBuild(apiUrl, parameters);
+			String resultUrl = urlBuild(url, parameters);
 			
-			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request,
+			ResponseEntity<String> response = restTemplate.exchange(resultUrl, HttpMethod.GET, request,
 					String.class);			
 			return response.getBody();
 		} catch (Exception e) {
@@ -97,8 +110,7 @@ public class ApiManager {
 		return null;
 	}
 	
-	private String urlBuild(String apiUrl, Map<String, Object> parameters) {
-		String resultUrl = apiInformation.getUrl() + apiUrl;
+	private String urlBuild(String url, Map<String, Object> parameters) {
 		String params = "";
 		
 		Set<String> keySet = parameters.keySet();			
@@ -108,7 +120,7 @@ public class ApiManager {
 		if(!params.equals("")) {
 			params = "/" + params.replace("&", "?");			
 		}
-		return resultUrl + params;
+		return url + params;
 	}
 	
 }

@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jylee.tft.service.DataManager;
 import com.jylee.tft.service.TFTService;
 import com.jylee.tft.service.statistic.PlayStatistics;
-import com.jylee.tft.service.statistic.PlayTimeStatistic;
+import com.jylee.tft.service.statistic.PlayTimeStatistics;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,9 +42,9 @@ public class TftApiController {
 	}
 
 	@RequestMapping(value="/playInfo", method = RequestMethod.GET)
-	public PlayStatistics playInfo(@RequestParam int year, @RequestParam int month, @RequestParam String summonerId)
+	public PlayStatistics playInfo(@RequestParam int year, @RequestParam int month, @RequestParam String summonerName)
 	{		
-		PlayStatistics playStatistics = tftService.getPlayTimeStatistics(year, month, puuid);
+		PlayStatistics playStatistics = tftService.getPlayTimeStatistics(year, month, summonerName);
 
 		return playStatistics;
 	}

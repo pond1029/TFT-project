@@ -38,7 +38,8 @@ import lombok.Setter;
 @Validated
 public class ApiInformation {
 
-	private String url;
+	private String asiaUrl;
+	private String krUrl;
 	private String key;
 	
 }

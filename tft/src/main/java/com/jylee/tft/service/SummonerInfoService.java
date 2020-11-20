@@ -1,18 +1,29 @@
 package com.jylee.tft.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jylee.tft.dao.SummonerInfo;
 import com.jylee.tft.repository.SummonerInfoRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class SummonerInfoService {
 
-	  private final SummonerInfoRepository summonerInfoRepository;
-	  
-}
+	@Autowired
+	ApiManager apiManager;
 
+	final private SummonerInfoRepository summonerInfoRepository;
+
+	public SummonerInfo getSummonerInfo(String summonerName) {
+		SummonerInfo summonerInfo = summonerInfoRepository.findByName(summonerName);
+		if (summonerInfo == null) {
+			summonerInfo = apiManager.retrieveSummonerInfo(summonerName);
+			summonerInfo = summonerInfoRepository.save(summonerInfo);
+		}
+
+		return summonerInfo;
+	}
+}

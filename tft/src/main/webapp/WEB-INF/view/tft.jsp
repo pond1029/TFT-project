@@ -50,7 +50,7 @@
 	<!-- Page Content -->
 	<div class="container" style="width: 90vw; height: 90vh;">
 		<div>
-		<label id="summonerId" style="cursor: pointer; font-size: xx-large;">야 방금 무빙봤냐</label>
+		<label id="summonerName" style="cursor: pointer; font-size: xx-large;">야 방금 무빙봤냐</label>
 		<button id="update" onclick="update()">갱신</button>
 		
 		</div>
@@ -87,9 +87,9 @@ send();
 	
 function update(){
 
-	var summonerId = document.getElementById("summonerId").innerHTML;	
+	var summonerName = document.getElementById("summonerName").innerHTML;	
 	
-	fetch('http://localhost:8080/tft/update?summonerId=' + summonerId,{
+	fetch('http://localhost:8080/tft/update?summonerName=' + summonerName,{
 			method: 'GET',
 			headers:{
 				'Content-Type':'application/json'
@@ -138,11 +138,11 @@ function getDate(move){
 }
 
 function send(){
-	var summonerId = document.getElementById("summonerId").innerHTML;	
+	var summonerName = document.getElementById("summonerName").innerHTML;	
 	var year = document.getElementById("year").innerHTML;	
 	var month = document.getElementById("month").innerHTML;	
 
-	var params = 'year=' + year + '&month=' + month + '&summonerId=' + summonerId;
+	var params = 'year=' + year + '&month=' + month + '&summonerName=' + summonerName;
 	
 	fetch('http://localhost:8080/tft/playInfo?' + params,{
 			method: 'GET',

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.jylee.tft.dao.MatchInfo;
 import com.jylee.tft.dao.Participants;
+import com.jylee.tft.dao.SummonerInfo;
 import com.jylee.tft.util.PondUtil;
 
 /**
@@ -33,6 +34,20 @@ import com.jylee.tft.util.PondUtil;
 @Service
 public class Converter {
 
+	public SummonerInfo convertToSummonerInfo(Map map) {
+		SummonerInfo summonerInfo = SummonerInfo.builder()
+				.id((String) map.get("id"))
+				.accountId((String) map.get("accountId"))
+				.puuid((String) map.get("puuid"))
+				.name((String) map.get("name"))
+				.profileIconId(((Double) map.get("profileIconId")).longValue())
+				.revisionDate(((Double) map.get("revisionDate")).longValue())
+				.summonerLevel(((Double) map.get("summonerLevel")).longValue())
+				.build();
+		
+		return summonerInfo;
+	}
+	
 	public MatchInfo convertToMatchInfo(Map map) {
 		Map<String, Object> metaDataMap = (Map<String, Object>) map.get("metadata");
 		Map<String, Object> infoMap = (Map<String, Object>) map.get("info");

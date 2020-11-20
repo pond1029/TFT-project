@@ -91,7 +91,7 @@ public class MatchIdRetrieve implements Retrieve{
 	}
 	
 	private String getUrl(Map<String, Object> parameters) {
-		String resultUrl = apiInformation.getUrl() + apiUrl;
+		String resultUrl = apiInformation.getAsiaUrl() + apiUrl;
 		String params = "";
 		
 		Set<String> keySet = parameters.keySet();			

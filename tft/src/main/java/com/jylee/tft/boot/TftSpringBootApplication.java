@@ -21,7 +21,7 @@ import com.jylee.tft.dao.ApiInformation;
 @EnableAsync
 @EnableScheduling
 @EntityScan("com.jylee.tft.dao")
-@EnableJpaRepositories("com.jylee.ftf.repository")
+@EnableJpaRepositories("com.jylee.tft.repository")
 public class TftSpringBootApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
 	@PersistenceContext

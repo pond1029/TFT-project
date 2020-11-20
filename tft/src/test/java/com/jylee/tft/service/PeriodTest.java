@@ -9,6 +9,8 @@
 
 package com.jylee.tft.service;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +40,12 @@ public class PeriodTest {
 	void construnctor_test_period() {
 		//given
 		period = new Period(2020,9);
+		List<String> list = period.splitByDay();
+		for(int i = 0; i < list.size(); i++) {
+			log.info(list.get(i));
+		}
 		//when
 		//then
-		log.info(period.getStartDateToString());
-		log.info(period.getEndDateToString());
 		
 	}
 

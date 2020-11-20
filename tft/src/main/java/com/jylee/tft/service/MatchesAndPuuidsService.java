@@ -2,6 +2,7 @@ package com.jylee.tft.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jylee.tft.dao.MatchesAndPuuids;
@@ -13,8 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class MatchesAndPuuidsService {
-	
-	private final MatchesAndPuuidsRepository matchesAndPuuidsRepository;
+
+	final private MatchesAndPuuidsRepository matchesAndPuuidsRepository;
 		
 	public List<MatchesAndPuuids> getListMatchesAndPuuids() {
 		List<MatchesAndPuuids> listMatchesAndPuuids = matchesAndPuuidsRepository.findAll();

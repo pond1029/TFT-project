@@ -9,10 +9,12 @@
 
 package com.jylee.tft.dao;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
   * @Package : com.jylee.tft.dao
@@ -24,74 +26,84 @@ import java.util.Date;
   */
 
 public class Period {
+
+	private SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");	
+	private Date from;
+	private Date to;
 	
-	private Date startDate;
-	private Date endDate;
-	
 	/**
-	 * @return the startDate
+	 * @return the from
 	 */
-	public Date getStartDate() {
-		return startDate;
+	public Date getFrom() {
+		return from;
 	}
 
 	/**
-	 * @param startDate the startDate to set
+	 * @param from the from to set
 	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setFrom(Date from) {
+		this.from = from;
 	}
 
 	/**
-	 * @return the endDate
+	 * @return the to
 	 */
-	public Date getEndDate() {
-		return endDate;
+	public Date geTto() {
+		return to;
 	}
 
 	/**
-	 * @param endDate the endDate to set
+	 * @param to the to to set
 	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setTo(Date to) {
+		this.to = to;
 	}
 		
-	public Period(Date startDate, Date endDate) {
-		this.startDate = startDate;
-		this.endDate = endDate;
+	public Period(Date from, Date to) {
+		this.from = from;
+		this.to = to;
 	}
 
 	public Period(int year) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, 0, 1);
-		this.startDate = cal.getTime();
+		this.from = cal.getTime();
 		cal.set(year, 11, 31);
-		this.endDate = cal.getTime();
+		this.to = cal.getTime();
 	}
 
 	public Period(int year, int month) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month - 1, 1);
-		this.startDate = cal.getTime();
+		this.from = cal.getTime();
 		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
-		this.endDate = cal.getTime();		
+		this.to = cal.getTime();		
 	}
 	
 	public Period(int year, int month, int day) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month - 1, day);
-		this.startDate = cal.getTime();
-		this.endDate = cal.getTime();
+		this.from = cal.getTime();
+		this.to = cal.getTime();
 		
 	}
 	
-	public String getStartDateToString() {
-		SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");	
-		return format.format(this.startDate);
+	public String getFromByString() {
+		return format.format(this.from);
 	}
 
-	public String getEndDateToString() {
-		SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");	
-		return format.format(this.endDate);
+	public String getToByString() {
+		return format.format(this.to);
+	}
+	
+	public List<String> splitByDay() {
+		List<String> dayLists = new ArrayList();		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(from);	
+		while(!to.before(cal.getTime())) {
+			dayLists.add(format.format(cal.getTime()));
+			cal.add(Calendar.DATE, 1);
+		}
+		return dayLists;
 	}
 }
