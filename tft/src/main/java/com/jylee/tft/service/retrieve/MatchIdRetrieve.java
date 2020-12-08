@@ -56,7 +56,6 @@ public class MatchIdRetrieve implements Retrieve{
 
 	@Override
 	public String[] retrieve(Map<String, Object> parameters) {
-		// TODO Auto-generated method stub
 		Gson gson = new Gson();
 		String response = send(apiUrl, parameters);		
 		Map<String, Object> bodyMap = gson.fromJson(response, Map.class);

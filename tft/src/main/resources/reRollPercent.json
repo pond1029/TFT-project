@@ -1,0 +1,47 @@
+[
+  {
+    "userLevel" : 1,
+    "normal" : [100,0,0,0,0],
+    "choiced" : [100,0,0,0,0]
+  },
+  {
+    "userLevel" : 2,
+    "normal" : [100,0,0,0,0],
+    "choiced" : [100,0,0,0,0]
+  },
+  {
+    "userLevel" : 3,
+    "normal" : [75,25,0,0,0],
+    "choiced" : [100,0,0,0,0]
+  },
+  {
+    "userLevel" : 4,
+    "normal" : [55,30,15,0,0],
+    "choiced" : [60,40,0,0,0]
+  },
+  {
+    "userLevel" : 5,
+    "normal" : [45,33,20,2,0],
+    "choiced" : [40,55,5,0,0]
+  },
+  {
+    "userLevel" : 6,
+    "normal" : [35,35,25,5,0],
+    "choiced" : [15,45,40,0,0]
+  },
+  {
+    "userLevel" : 7,
+    "normal" : [24,35,30,10,1],
+    "choiced" : [0,40,55,5,0]
+  },
+  {
+    "userLevel" : 8,
+    "normal" : [15,25,35,20,5],
+    "choiced" : [0,15,45,40,0]
+  },
+  {
+    "userLevel" : 9,
+    "normal" : [10,15,30,30,15],
+    "choiced" : [0,0,15,45,40]
+  }
+]

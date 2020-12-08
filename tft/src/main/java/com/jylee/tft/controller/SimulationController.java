@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jylee.tft.service.simulation.ReRoll;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,7 +18,7 @@ public class SimulationController {
 	@RequestMapping(value="/reroll", method = RequestMethod.GET)
 	public ResponseEntity playInfo()
 	{		
-		log.info("reroll");
+		ReRoll reroll = new ReRoll(1, false);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
