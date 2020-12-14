@@ -7,7 +7,7 @@
   * @Information :
   */
 
-package com.jylee.tft.service;
+package com.jylee.tft.dataManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +26,11 @@ import com.jylee.tft.dao.MatchInfo;
 import com.jylee.tft.dao.MatchesAndPuuids;
 import com.jylee.tft.dao.Participants;
 import com.jylee.tft.dao.SummonerInfo;
+import com.jylee.tft.service.ApiManager;
+import com.jylee.tft.service.MatchInfoService;
+import com.jylee.tft.service.MatchesAndPuuidsService;
+import com.jylee.tft.service.ParticipantsService;
+import com.jylee.tft.service.SummonerInfoService;
 import com.jylee.tft.util.PondUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DataManagerService{
+public class DataManagerService implements DataManager{
 
 	@Autowired
 	ParticipantsService participantsService;

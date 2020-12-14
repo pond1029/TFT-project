@@ -7,7 +7,7 @@
   * @Information :
   */
 
-package com.jylee.tft.service;
+package com.jylee.tft.statistic;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.jylee.tft.dao.Participants;
 import com.jylee.tft.dao.SummonerInfo;
-import com.jylee.tft.service.statistic.PlayStatistics;
-import com.jylee.tft.service.statistic.PlayTime;
+import com.jylee.tft.service.ParticipantsService;
+import com.jylee.tft.service.SummonerInfoService;
 
 /**
   * @Package : com.jylee.tft.service

@@ -7,7 +7,7 @@
   * @Information :
   */
 
-package com.jylee.tft.service.statistic;
+package com.jylee.tft.statistic;
 
 /**
   * @Package : com.jylee.tft.service.statistic

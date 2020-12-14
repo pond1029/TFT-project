@@ -7,7 +7,7 @@
   * @Information :
   */
 
-package com.jylee.tft.service.statistic;
+package com.jylee.tft.statistic;
 
 import java.text.SimpleDateFormat;
 import java.time.Month;

@@ -12,8 +12,8 @@ package com.jylee.tft.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jylee.tft.service.statistic.PlayTime;
-import com.jylee.tft.service.statistic.PlayTime.PlayTimeBuilder;
+import com.jylee.tft.statistic.PlayTime;
+import com.jylee.tft.statistic.PlayTime.PlayTimeBuilder;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

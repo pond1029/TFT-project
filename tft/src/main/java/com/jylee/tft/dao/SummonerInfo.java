@@ -27,5 +27,6 @@ public class SummonerInfo {
 	private String name;
 	private String puuid;
 	private Long summonerLevel;
+	private String type;
 	
 }

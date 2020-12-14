@@ -7,7 +7,7 @@
   * @Information :
   */
 
-package com.jylee.tft.service.statistic;
+package com.jylee.tft.statistic;
 
 import com.jylee.tft.dao.Period;
 

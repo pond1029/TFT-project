@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jylee.tft.service.DataManagerService;
-import com.jylee.tft.service.StatisticsService;
-import com.jylee.tft.service.statistic.PlayStatistics;
+import com.jylee.tft.dataManager.DataManagerService;
+import com.jylee.tft.statistic.PlayStatistics;
+import com.jylee.tft.statistic.StatisticsService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +51,6 @@ public class StatisticsController {
 	@RequestMapping(path="/main.do", produces="text/plain; charset=UTF-8")
 	public ModelAndView tft(@RequestParam Map<String, Object> paramMap)
 	{
-		
 		ModelAndView modelAndView = new ModelAndView("/statistics");
 		
 		return modelAndView; 
@@ -59,7 +58,7 @@ public class StatisticsController {
 
 	@RequestMapping(value="/playTime", method = RequestMethod.GET)
 	public PlayStatistics playInfo(@RequestParam int year, @RequestParam int month, @RequestParam String summonerName)
-	{		
+	{
 		PlayStatistics playStatistics = statisticsService.getPlayTimeStatistics(year, month, summonerName);
 
 		return playStatistics;
@@ -67,8 +66,7 @@ public class StatisticsController {
 
 	@RequestMapping(value="/update", method = RequestMethod.GET)
 	public ResponseEntity update(@RequestParam String summonerId)
-	{  
-		
+	{
 		dataManagerService.update(summonerId);	
 
 		return new ResponseEntity<>(HttpStatus.OK);
