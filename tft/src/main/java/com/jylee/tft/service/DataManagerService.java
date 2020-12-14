@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.jylee.tft.dao.MatchInfo;
 import com.jylee.tft.dao.MatchesAndPuuids;
 import com.jylee.tft.dao.Participants;
+import com.jylee.tft.dao.SummonerInfo;
 import com.jylee.tft.util.PondUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DataManager {
+public class DataManagerService{
 
 	@Autowired
 	ParticipantsService participantsService;
@@ -52,15 +53,20 @@ public class DataManager {
 	MatchesAndPuuidsService matchesAndPuuidsService;
 
 	@Autowired
+	SummonerInfoService summonerInfoService;
+	
+	@Autowired
 	ApiManager apiManager;
 
-	public void update(String puuid) {
+	public void update(String summonerId) {
 
-		List<String> matchIdList = apiManager.retrieveMatchId(puuid);
+		SummonerInfo summonerInfo = summonerInfoService.getSummonerInfo(summonerId);
+		
+		List<String> matchIdList = apiManager.retrieveMatchId(summonerInfo.getPuuid());
 		
 		if (!matchIdList.isEmpty()) {
 
-			List<MatchesAndPuuids> matchList = matchesAndPuuidsService.getListMatchesAndPuuids(puuid);
+			List<MatchesAndPuuids> matchList = matchesAndPuuidsService.getListMatchesAndPuuids(summonerInfo.getPuuid());
 			
 			List<String> dbList = matchList.stream()
 					.map(MatchesAndPuuids::getMatchId)
@@ -78,7 +84,7 @@ public class DataManager {
 				MatchInfo matchInfo = apiManager.retrieveMatchInfo(matchId);
 				matchInfoService.setMatchInfo(matchInfo);
 				participantsService.setparticipants(matchInfo.getParticipantLists());
-				matchesAndPuuidsService.setMatchesAndPuuids(matchId, puuid);
+				matchesAndPuuidsService.setMatchesAndPuuids(matchId, summonerInfo.getPuuid());
 			}
 			
 		}

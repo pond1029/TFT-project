@@ -29,7 +29,7 @@ import com.jylee.tft.service.statistic.PlayTime;
   */
 
 @Service
-public class TFTService {
+public class StatisticsService {
 
 	@Autowired
 	ParticipantsService participantsService;

@@ -56,7 +56,7 @@ public class ApiManager {
 		Map<String, Object> parameters = new HashMap();
 		String apiUrl = "/tft/summoner/v1/summoners/by-name/" + summonerName;
 		
-		String result = send(apiInformation.getKrUrl() + apiUrl, parameters);
+		String result = send(apiInformation.getUrlKr() + apiUrl, parameters);
 		Map<String, Object> bodyMap = gson.fromJson(result, Map.class);
 		
 		SummonerInfo summonerInfo = converter.convertToSummonerInfo(bodyMap);
@@ -69,7 +69,7 @@ public class ApiManager {
 		parameters.put("ids", 999);
 		String apiUrl = "/tft/match/v1/matches/by-puuid/" + puuid;
 		
-		String result = send(apiInformation.getAsiaUrl() + apiUrl, parameters);
+		String result = send(apiInformation.getUrlAsia() + apiUrl, parameters);
 		String[] body = gson.fromJson(result, String[].class);
 		
 		return Arrays.asList(body);
@@ -79,7 +79,7 @@ public class ApiManager {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
 		String apiUrl = "/tft/match/v1/matches/" + matchId;
-		String result = send(apiInformation.getAsiaUrl() + apiUrl, parameters);
+		String result = send(apiInformation.getUrlAsia() + apiUrl, parameters);
 		
 		Map<String, Object> bodyMap = gson.fromJson(result, Map.class);
 		
@@ -97,7 +97,7 @@ public class ApiManager {
 			HttpHeaders headers = new HttpHeaders();			
 			headers.add("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
 			headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-			headers.add("X-Riot-Token", apiInformation.getKey());
+			headers.add("X-Riot-Token", apiInformation.getKeyTft());
 			HttpEntity<Map<String, Object>> request = new HttpEntity<>(parameters, headers);
 			String resultUrl = urlBuild(url, parameters);
 			

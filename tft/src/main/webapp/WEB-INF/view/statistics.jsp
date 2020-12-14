@@ -89,7 +89,7 @@ function update(){
 
 	var summonerName = document.getElementById("summonerName").innerHTML;	
 	
-	fetch('http://localhost:8080/tft/update?summonerName=' + summonerName,{
+	fetch('http://localhost:8080/statistics/update?summonerName=' + summonerName,{
 			method: 'GET',
 			headers:{
 				'Content-Type':'application/json'
@@ -144,7 +144,7 @@ function send(){
 
 	var params = 'year=' + year + '&month=' + month + '&summonerName=' + summonerName;
 	
-	fetch('http://localhost:8080/tft/playInfo?' + params,{
+	fetch('http://localhost:8080/statistics/playTime?' + params,{
 			method: 'GET',
 			headers:{
 				'Content-Type':'application/json'

@@ -45,7 +45,8 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-*.yml
+application-dev.yml
+application-production.yml
 
 # External tool builders
 .externalToolBuilders/

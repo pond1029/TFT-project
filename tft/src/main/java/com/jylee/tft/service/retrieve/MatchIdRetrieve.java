@@ -85,12 +85,12 @@ public class MatchIdRetrieve implements Retrieve{
 		HttpHeaders headers = new HttpHeaders();			
 		headers.add("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
 		headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-		headers.add("X-Riot-Token", apiInformation.getKey());
+		headers.add("X-Riot-Token", apiInformation.getKeyTft());
 		return headers;
 	}
 	
 	private String getUrl(Map<String, Object> parameters) {
-		String resultUrl = apiInformation.getAsiaUrl() + apiUrl;
+		String resultUrl = apiInformation.getUrlAsia() + apiUrl;
 		String params = "";
 		
 		Set<String> keySet = parameters.keySet();			

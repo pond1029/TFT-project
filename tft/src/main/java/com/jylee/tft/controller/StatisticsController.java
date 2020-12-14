@@ -1,3 +1,12 @@
+/**
+  * @Package : com.jylee.tft.controller
+  * @FileName : StatisticsController.java
+  * @Date : 2020. 12. 14. 
+  * @Author : "LeeJaeYeon"
+  * @Version :
+  * @Information :
+  */
+
 package com.jylee.tft.controller;
 
 import java.util.Map;
@@ -12,39 +21,46 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jylee.tft.service.DataManager;
-import com.jylee.tft.service.TFTService;
+import com.jylee.tft.service.DataManagerService;
+import com.jylee.tft.service.StatisticsService;
 import com.jylee.tft.service.statistic.PlayStatistics;
-import com.jylee.tft.service.statistic.PlayTimeStatistics;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+  * @Package : com.jylee.tft.controller
+  * @FileName : StatisticsController.java
+  * @Date : 2020. 12. 14. 
+  * @Author : "LeeJaeYeon"
+  * @Version :
+  * @Information : 통계 컨트롤러
+  */
+
 @Slf4j
 @RestController
-@RequestMapping(path="/tft")
-public class TftApiController {
-	private static final String puuid = "EbsbjdhoWzAvsnU_C8p9djSq_A9-_7pwXU0WaJ_EN_8SbWS0bR7djr5EVa99ZKq1QyT8yswhvDeeOg";
+@RequestMapping(path="/statistics")
+public class StatisticsController {
+
+	@Autowired
+	DataManagerService dataManagerService;
 	
 	@Autowired
-	DataManager dataManager;
-	
-	@Autowired
-	TFTService tftService;
+	StatisticsService statisticsService;
 	
 	@ResponseBody
 	@RequestMapping(path="/main.do", produces="text/plain; charset=UTF-8")
 	public ModelAndView tft(@RequestParam Map<String, Object> paramMap)
 	{
 		
-		ModelAndView modelAndView = new ModelAndView("/tft");
+		ModelAndView modelAndView = new ModelAndView("/statistics");
 		
-		return modelAndView;
+		return modelAndView; 
 	}
 
-	@RequestMapping(value="/playInfo", method = RequestMethod.GET)
+	@RequestMapping(value="/playTime", method = RequestMethod.GET)
 	public PlayStatistics playInfo(@RequestParam int year, @RequestParam int month, @RequestParam String summonerName)
 	{		
-		PlayStatistics playStatistics = tftService.getPlayTimeStatistics(year, month, summonerName);
+		PlayStatistics playStatistics = statisticsService.getPlayTimeStatistics(year, month, summonerName);
 
 		return playStatistics;
 	}
@@ -53,19 +69,8 @@ public class TftApiController {
 	public ResponseEntity update(@RequestParam String summonerId)
 	{  
 		
-		dataManager.update(puuid);	
+		dataManagerService.update(summonerId);	
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
-	@RequestMapping(path="/simulation.do", produces="text/plain; charset=UTF-8")
-	public ModelAndView simulation(@RequestParam Map<String, Object> paramMap)
-	{
-		
-		ModelAndView modelAndView = new ModelAndView("/simulation");
-		
-		return modelAndView;
-	}
-	
 }
