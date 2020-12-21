@@ -1,7 +1,7 @@
 /**
   * @Package : com.jylee.tft.dataManager
-  * @FileName : DataManager.java
-  * @Date : 2020. 12. 14. 
+  * @FileName : TFTDataManager.java
+  * @Date : 2020. 12. 21. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
@@ -9,18 +9,21 @@
 
 package com.jylee.tft.dataManager;
 
-import java.util.List;
-
 /**
   * @Package : com.jylee.tft.dataManager
-  * @FileName : DataManager.java
-  * @Date : 2020. 12. 14. 
+  * @FileName : TFTDataManager.java
+  * @Date : 2020. 12. 21. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
   */
 
-public interface DataManager {
+public class TFTDataManager implements DataManager{
 
-	public boolean update(String userId);
+	@Override
+	public boolean update(String userId) {
+		return false;
+	}
+
+
 }

@@ -35,10 +35,10 @@ import lombok.Setter;
 @Getter @Setter
 public class PlayStatistics {
 
-	private List<PlayTime> playTimeLists;
+	private List<TFTPlayTime> playTimeLists;
 	
 	public PlayStatistics(int year, int month) {
-		playTimeLists = new ArrayList<PlayTime>();
+		playTimeLists = new ArrayList<TFTPlayTime>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");		
 		Calendar cal = Calendar.getInstance();		
 		cal.set(year, month - 1 ,1);		
@@ -46,25 +46,25 @@ public class PlayStatistics {
 		
 		for(int i = 0; i < last; i++) {
 			String date = sdf.format(cal.getTime());			
-			PlayTime playtime = new PlayTime(date, new Long(0L));
+			TFTPlayTime playtime = new TFTPlayTime(date, new Long(0L));
 			playTimeLists.add(playtime);		
 			cal.add(Calendar.DATE, 1);
 		}
 	}
 	
-	public void addPlayTime(PlayTime playTime) {
-		for(PlayTime inserted : playTimeLists) {
-			if(inserted.isSameDate(playTime)) {
-				inserted.setSeconds(inserted.getSeconds() + playTime.getSeconds());
+	public void addPlayTime(TFTPlayTime tFTPlayTime) {
+		for(TFTPlayTime inserted : playTimeLists) {
+			if(inserted.isSameDate(tFTPlayTime)) {
+				inserted.setSeconds(inserted.getSeconds() + tFTPlayTime.getSeconds());
 			}
 		}
 	}
 	
 	
 	public void sort() {
-		playTimeLists.sort(new Comparator<PlayTime>() {
+		playTimeLists.sort(new Comparator<TFTPlayTime>() {
 			@Override
-			public int compare(PlayTime p1, PlayTime p2) {
+			public int compare(TFTPlayTime p1, TFTPlayTime p2) {
 				return p1.getDate().compareTo(p2.getDate());
 			}
 		});
@@ -73,8 +73,8 @@ public class PlayStatistics {
 	
 	public Long getTotalPlayTime() {
 		Long totalPlayTime = new Long(0L);
-		for(PlayTime playTime : playTimeLists) {
-			totalPlayTime += playTime.getSeconds();
+		for(TFTPlayTime tFTPlayTime : playTimeLists) {
+			totalPlayTime += tFTPlayTime.getSeconds();
 		}
 		return totalPlayTime;
 	}

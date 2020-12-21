@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.jylee.tft.dao.ApiInformation;
+import com.jylee.tft.dao.TFTAPIInformation;
 
 @SpringBootApplication
 @ComponentScan(basePackages="com.jylee.tft")
@@ -28,7 +28,7 @@ public class TftSpringBootApplication extends SpringBootServletInitializer imple
 	EntityManager entityManager;
 	  
 	@Autowired
-	ApiInformation apiInformation;
+	TFTAPIInformation tFTAPIInformation;
 	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {

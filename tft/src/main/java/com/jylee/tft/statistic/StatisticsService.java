@@ -49,9 +49,9 @@ public class StatisticsService {
 			
 			String gameDate = participants.getGameDate();
 			Long timeEliminated = participants.getTimeEliminated();
-			PlayTime playTime = new PlayTime(gameDate, timeEliminated);
+			TFTPlayTime tFTPlayTime = new TFTPlayTime(gameDate, timeEliminated);
 			
-			playStatistics.addPlayTime(playTime);
+			playStatistics.addPlayTime(tFTPlayTime);
 		}
 		playStatistics.sort();
 		

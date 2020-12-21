@@ -1,7 +1,7 @@
 /**
   * @Package : com.jylee.tft.dao
-  * @FileName : ApiInformation.java
-  * @Date : 2020. 10. 22. 
+  * @FileName : LOLAPIInformation.java
+  * @Date : 2020. 12. 21. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
@@ -14,33 +14,31 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
   * @Package : com.jylee.tft.dao
-  * @FileName : ApiInformation.java
-  * @Date : 2020. 10. 22. 
+  * @FileName : LOLAPIInformation.java
+  * @Date : 2020. 12. 21. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
   */
-@Getter @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Configuration
 @ConfigurationProperties(prefix = "api.riot")
 @Component
 @Validated
-public class ApiInformation {
+public class LOLAPIInformation implements APIInformation{
 
 	private String urlKr;
-	private String urlAsia;
-	private String keyTft;
 	private String keyLol;
 	
+	@Override
+	public String getBaseUrl() {
+		return this.urlKr;
+	}
+
+	@Override
+	public String getKey() {
+		return this.keyLol;
+	}
+
 }

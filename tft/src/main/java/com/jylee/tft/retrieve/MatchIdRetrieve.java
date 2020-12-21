@@ -23,7 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
-import com.jylee.tft.dao.ApiInformation;
+import com.jylee.tft.dao.TFTAPIInformation;
 import com.jylee.tft.dao.MatchInfo;
 import com.jylee.tft.dao.Participants;
 
@@ -41,7 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MatchIdRetrieve implements Retrieve{
 
-	private ApiInformation apiInformation = new ApiInformation();
+	private TFTAPIInformation tFTAPIInformation = new TFTAPIInformation();
 	private String apiUrl = "/tft/match/v1/matches/by-puuid/";
 	private String puuid;
 	
@@ -85,12 +85,12 @@ public class MatchIdRetrieve implements Retrieve{
 		HttpHeaders headers = new HttpHeaders();			
 		headers.add("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8");
 		headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-		headers.add("X-Riot-Token", apiInformation.getKeyTft());
+		headers.add("X-Riot-Token", tFTAPIInformation.getKey());
 		return headers;
 	}
 	
 	private String getUrl(Map<String, Object> parameters) {
-		String resultUrl = apiInformation.getUrlAsia() + apiUrl;
+		String resultUrl = tFTAPIInformation.getMatchUrl() + apiUrl;
 		String params = "";
 		
 		Set<String> keySet = parameters.keySet();			

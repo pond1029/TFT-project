@@ -63,7 +63,8 @@ public class DataManagerService implements DataManager{
 	@Autowired
 	ApiManager apiManager;
 
-	public void update(String summonerId) {
+	@Override
+	public boolean update(String summonerId) {
 
 		SummonerInfo summonerInfo = summonerInfoService.getSummonerInfo(summonerId);
 		
@@ -93,7 +94,7 @@ public class DataManagerService implements DataManager{
 			}
 			
 		}
+		return true;
 	}
-
 	
 }
