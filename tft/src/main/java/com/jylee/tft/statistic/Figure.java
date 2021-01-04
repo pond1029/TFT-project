@@ -1,7 +1,7 @@
 /**
   * @Package : com.jylee.tft.statistic
-  * @FileName : PlayTime.java
-  * @Date : 2020. 12. 21. 
+  * @FileName : Graph.java
+  * @Date : 2021. 1. 4. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
@@ -11,13 +11,17 @@ package com.jylee.tft.statistic;
 
 /**
   * @Package : com.jylee.tft.statistic
-  * @FileName : PlayTime.java
-  * @Date : 2020. 12. 21. 
+  * @FileName : Graph.java
+  * @Date : 2021. 1. 4. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
   */
 
-public interface PlayTime {
+public interface Figure {
 
+	public String[] gatLabel();
+	public Long[] getData();
+	public void setFigure(String label, Long data);
+	
 }

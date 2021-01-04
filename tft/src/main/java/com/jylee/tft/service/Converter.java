@@ -17,7 +17,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.dao.TFTMatchInfo;
 import com.jylee.tft.dao.Participants;
 import com.jylee.tft.dao.SummonerInfo;
 import com.jylee.tft.util.PondUtil;
@@ -48,12 +48,12 @@ public class Converter {
 		return summonerInfo;
 	}
 	
-	public MatchInfo convertToMatchInfo(Map map) {
+	public TFTMatchInfo convertToMatchInfo(Map map) {
 		Map<String, Object> metaDataMap = (Map<String, Object>) map.get("metadata");
 		Map<String, Object> infoMap = (Map<String, Object>) map.get("info");
 		List participantLists = (List) infoMap.get("participants");
 		
-		MatchInfo matchInfo = MatchInfo.builder()
+		TFTMatchInfo tFTMatchInfo = TFTMatchInfo.builder()
 				.gameDatetime(((Double) infoMap.get("game_datetime")).longValue())
 				.gameLength(((Double) infoMap.get("game_length")).longValue())
 				.gameVariation((String) infoMap.get("game_variation"))
@@ -62,7 +62,7 @@ public class Converter {
 				.matchId((String)metaDataMap.get("match_id"))
 				.build();
 		
-		return matchInfo;
+		return tFTMatchInfo;
 	}
 	
 	public Participants convertToParticipants(Map map) {

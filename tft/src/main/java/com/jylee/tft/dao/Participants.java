@@ -31,12 +31,12 @@ public class Participants {
 	private Long totalDamageToPlayers;
 	private String playersGameTime;
 	private String puuid;
-	@ManyToOne(targetEntity = MatchInfo.class)
+	@ManyToOne(targetEntity = TFTMatchInfo.class)
 	@JoinColumn(name = "match_id")
-	private MatchInfo matchInfo;
+	private TFTMatchInfo tftMatchInfo;
 	
 	public String getGameDate() {
-		return matchInfo.getGameDate();
+		return tftMatchInfo.getGameDate();
 	}
 	
 }

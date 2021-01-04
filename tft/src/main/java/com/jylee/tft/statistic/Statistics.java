@@ -1,7 +1,7 @@
 /**
   * @Package : com.jylee.tft.service.statistic
-  * @FileName : Statistics.java
-  * @Date : 2020. 11. 20. 
+  * @FileName : Statistic.java
+  * @Date : 2020. 11. 4. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
@@ -9,24 +9,25 @@
 
 package com.jylee.tft.statistic;
 
-import com.jylee.tft.dao.Period;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
   * @Package : com.jylee.tft.service.statistic
-  * @FileName : Statistics.java
-  * @Date : 2020. 11. 20. 
+  * @FileName : Statistic.java
+  * @Date : 2020. 11. 4. 
   * @Author : "LeeJaeYeon"
   * @Version :
-  * @Information :
+  * @Information : 통계
   */
 
-@Getter @Setter
-@AllArgsConstructor
-public abstract class Statistics {
-	String id;
-	Period period;
+public interface Statistics {
+	/**
+	 * 
+	  * @Method Name : getStatistics
+	  * @Date : 2021. 1. 4.
+	  * @Author : "LeeJaeYeon"
+	  * @Version : 
+	  * @Information : 전체 데이터 통계
+	  * @param userId
+	  * @return
+	 */
+	public Figure getStatistics(String userId);
 }

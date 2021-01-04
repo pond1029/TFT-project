@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.dao.TFTMatchInfo;
 import com.jylee.tft.repository.MatchInfoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,15 +16,15 @@ public class MatchInfoService {
 
 	final private MatchInfoRepository matchInfoRepository;
 	
-	public MatchInfo setMatchInfo(MatchInfo matchInfo) {
-		return matchInfoRepository.save(matchInfo);
+	public TFTMatchInfo setMatchInfo(TFTMatchInfo tFTMatchInfo) {
+		return matchInfoRepository.save(tFTMatchInfo);
 	}
 	
-	public List<MatchInfo> getMatchInfoListBetween(String from, String to){
+	public List<TFTMatchInfo> getMatchInfoListBetween(String from, String to){
 		return matchInfoRepository.findAll();
 	}
 	
-	public List<MatchInfo> getMatchInfo(){
+	public List<TFTMatchInfo> getMatchInfo(){
 		return matchInfoRepository.findAll();
 	}
 }

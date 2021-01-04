@@ -7,7 +7,7 @@
   * @Information :
   */
 
-package com.jylee.tft.dao;
+package com.jylee.tft.statistic;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
   * @Package : com.jylee.tft.dao
@@ -25,40 +28,13 @@ import java.util.List;
   * @Information : 기간 (yyyy-MM-dd);
   */
 
+@Getter @Setter
 public class Period {
 
-	private SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");	
+	final private SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");	
 	private Date from;
 	private Date to;
-	
-	/**
-	 * @return the from
-	 */
-	public Date getFrom() {
-		return from;
-	}
-
-	/**
-	 * @param from the from to set
-	 */
-	public void setFrom(Date from) {
-		this.from = from;
-	}
-
-	/**
-	 * @return the to
-	 */
-	public Date geTto() {
-		return to;
-	}
-
-	/**
-	 * @param to the to to set
-	 */
-	public void setTo(Date to) {
-		this.to = to;
-	}
-		
+			
 	public Period(Date from, Date to) {
 		this.from = from;
 		this.to = to;
@@ -96,7 +72,7 @@ public class Period {
 		return format.format(this.to);
 	}
 	
-	public List<String> splitByDay() {
+	public String[] splitByDay() { 
 		List<String> dayLists = new ArrayList();		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(from);	
@@ -104,6 +80,6 @@ public class Period {
 			dayLists.add(format.format(cal.getTime()));
 			cal.add(Calendar.DATE, 1);
 		}
-		return dayLists;
+		return dayLists.toArray(new String[dayLists.size()]);
 	}
 }

@@ -27,6 +27,7 @@ public class TftSpringBootApplication extends SpringBootServletInitializer imple
 	@PersistenceContext
 	EntityManager entityManager;
 	  
+	//TODO ?? 지워도 되는지
 	@Autowired
 	TFTAPIInformation tFTAPIInformation;
 	

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
-import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.dao.TFTMatchInfo;
 import com.jylee.tft.dao.Participants;
 import com.jylee.tft.dao.SummonerInfo;
 import com.jylee.tft.dao.TFTAPIInformation;
@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
   * @Version :
   * @Information :
   */
-
+//TODO 지워도 되는건지
 @Slf4j
 @Service
 public class ApiManager {
@@ -75,7 +75,7 @@ public class ApiManager {
 		return Arrays.asList(body);
 	}
 
-	public MatchInfo retrieveMatchInfo(String matchId) {
+	public TFTMatchInfo retrieveMatchInfo(String matchId) {
 		Gson gson = new Gson();
 		Map<String, Object> parameters = new HashMap();
 		String apiUrl = "/tft/match/v1/matches/" + matchId;
@@ -83,12 +83,12 @@ public class ApiManager {
 		
 		Map<String, Object> bodyMap = gson.fromJson(result, Map.class);
 		
-		MatchInfo matchInfo = converter.convertToMatchInfo(bodyMap);
+		TFTMatchInfo tFTMatchInfo = converter.convertToMatchInfo(bodyMap);
 		List<Participants> participants = converter.convertToParticipantsLists(bodyMap);
 		
-		matchInfo.setParticipantLists(participants);
+		tFTMatchInfo.setParticipantLists(participants);
 		
-		return matchInfo;
+		return tFTMatchInfo;
 	}
 	
 	public String send(String url, Map<String, Object> parameters) {

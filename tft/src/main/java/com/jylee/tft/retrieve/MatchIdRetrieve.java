@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 import com.jylee.tft.dao.TFTAPIInformation;
-import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.dao.TFTMatchInfo;
 import com.jylee.tft.dao.Participants;
 
 import lombok.extern.slf4j.Slf4j;

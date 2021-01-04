@@ -28,8 +28,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TFTPlayTime implements PlayTime{
-
+public class TFTPlayTime {
 	private String date;
 	private Long seconds;
 	

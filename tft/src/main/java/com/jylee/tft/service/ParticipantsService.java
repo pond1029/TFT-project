@@ -24,6 +24,10 @@ public class ParticipantsService {
 		return participantsRepository.findAllByPuuid(puuid);
 	}
 	
+	public List<Participants> getParticipants(String puuid, String from, String to){
+		return participantsRepository.findAllByPuuid(puuid);
+	}
+	
 	public Participants setparticipants(Participants participants) {
 		return participantsRepository.save(participants);
 	}

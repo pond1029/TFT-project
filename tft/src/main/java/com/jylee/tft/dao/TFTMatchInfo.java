@@ -18,7 +18,7 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchInfo {
+public class TFTMatchInfo {
 
 	@Id
 	private String matchId;
@@ -28,6 +28,6 @@ public class MatchInfo {
 	private String gameVariation;
 	private String gameVersion;	
 	
-	@OneToMany(mappedBy = "matchInfo")
+	@OneToMany(mappedBy = "tftMatchInfo")
 	private List<Participants> participantLists;
 }

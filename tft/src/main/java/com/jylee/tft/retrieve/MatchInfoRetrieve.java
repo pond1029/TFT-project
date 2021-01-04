@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 import com.jylee.tft.dao.TFTAPIInformation;
-import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.dao.TFTMatchInfo;
 import com.jylee.tft.dao.Participants;
 import com.jylee.tft.util.PondUtil;
 
@@ -58,17 +58,17 @@ public class MatchInfoRetrieve implements Retrieve{
 	}
 
 	@Override
-	public MatchInfo retrieve(Map<String, Object> parameters) {
+	public TFTMatchInfo retrieve(Map<String, Object> parameters) {
 		Gson gson = new Gson();
 		String response = send(apiUrl, parameters);		
 		Map<String, Object> bodyMap = gson.fromJson(response, Map.class);
 		
-		MatchInfo matchInfo = convertToMatchInfo(bodyMap);
+		TFTMatchInfo tFTMatchInfo = convertToMatchInfo(bodyMap);
 		List<Participants> participants = convertToParticipantsLists(bodyMap);
 		
-		matchInfo.setParticipantLists(participants);
+		tFTMatchInfo.setParticipantLists(participants);
 		
-		return matchInfo;
+		return tFTMatchInfo;
 	}
 	
 	public String send(String apiUrl, Map<String, Object> parameters) {
@@ -109,12 +109,12 @@ public class MatchInfoRetrieve implements Retrieve{
 		return resultUrl + params;
 	}
 	
-	public MatchInfo convertToMatchInfo(Map map) {
+	public TFTMatchInfo convertToMatchInfo(Map map) {
 		Map<String, Object> metaDataMap = (Map<String, Object>) map.get("metadata");
 		Map<String, Object> infoMap = (Map<String, Object>) map.get("info");
 		List participantLists = (List) infoMap.get("participants");
 		
-		MatchInfo matchInfo = MatchInfo.builder()
+		TFTMatchInfo tFTMatchInfo = TFTMatchInfo.builder()
 				.gameDatetime(((Double) infoMap.get("game_datetime")).longValue())
 				.gameLength(((Double) infoMap.get("game_length")).longValue())
 				.gameVariation((String) infoMap.get("game_variation"))
@@ -123,7 +123,7 @@ public class MatchInfoRetrieve implements Retrieve{
 				.matchId((String)metaDataMap.get("match_id"))
 				.build();
 		
-		return matchInfo;
+		return tFTMatchInfo;
 	}
 
 	public List<Participants> convertToParticipantsLists(Map map){

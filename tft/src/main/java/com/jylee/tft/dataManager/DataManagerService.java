@@ -22,7 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.jylee.tft.dao.MatchInfo;
+import com.jylee.tft.dao.TFTMatchInfo;
 import com.jylee.tft.dao.MatchesAndPuuids;
 import com.jylee.tft.dao.Participants;
 import com.jylee.tft.dao.SummonerInfo;
@@ -87,9 +87,9 @@ public class DataManagerService implements DataManager{
 			}
 						
 			for (String matchId : insertList) {
-				MatchInfo matchInfo = apiManager.retrieveMatchInfo(matchId);
-				matchInfoService.setMatchInfo(matchInfo);
-				participantsService.setparticipants(matchInfo.getParticipantLists());
+				TFTMatchInfo tFTMatchInfo = apiManager.retrieveMatchInfo(matchId);
+				matchInfoService.setMatchInfo(tFTMatchInfo);
+				participantsService.setparticipants(tFTMatchInfo.getParticipantLists());
 				matchesAndPuuidsService.setMatchesAndPuuids(matchId, summonerInfo.getPuuid());
 			}
 			
