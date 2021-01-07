@@ -14,7 +14,7 @@ spring:
         use_sql_comment: true
   devtools: 
    livereload: 
-    enable: true
+    enabled: true
   freemarker:
    cache: false
 
