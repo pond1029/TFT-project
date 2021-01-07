@@ -23,15 +23,19 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import com.jylee.tft.statistic.domain.LOLMatchDetail;
+import com.jylee.tft.statistic.domain.LOLParticipant;
 import com.jylee.tft.statistic.domain.Period;
 import com.jylee.tft.statistic.domain.PeriodFigure;
 import com.jylee.tft.statistic.domain.RiotType;
 import com.jylee.tft.statistic.domain.Summoner;
 import com.jylee.tft.statistic.domain.SummonerPuuid;
 import com.jylee.tft.statistic.domain.TFTMatch;
-import com.jylee.tft.statistic.domain.TFTMatchDetail;
+import com.jylee.tft.statistic.domain.TFTParticipant;
+import com.jylee.tft.statistic.repository.LOLMatchDetailRepository;
+import com.jylee.tft.statistic.repository.LOLParticipantRepository;
 import com.jylee.tft.statistic.repository.SummonerRepository;
-import com.jylee.tft.statistic.repository.TFTMatchDetailRepository;
+import com.jylee.tft.statistic.repository.TFTParticipantRepository;
 import com.jylee.tft.statistic.repository.TFTMatchRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -56,54 +60,103 @@ public class StatisticsTest {
 	TFTMatchRepository tftMatch;
 	
 	@Autowired
-	TFTMatchDetailRepository tftDetail;
+	TFTParticipantRepository tftParticipant;
+	
+	@Autowired
+	LOLMatchDetailRepository lolMatch;
+	
+	@Autowired
+	LOLParticipantRepository lolParticipant;
 	
 	@Test
-	@DisplayName("매치 디테일 날짜에 따른 조회")
-	public void tftMatchDetailTest() {
+	@DisplayName("LOL 디테일 날짜에 따른 조회")
+	public void lolMatchDetailTest() {
+		
+		LOLParticipant participant1 = new LOLParticipant();
+		participant1.setAccountId("가렌");
 
-		TFTMatchDetail detail1 = TFTMatchDetail.builder()
+		LOLParticipant participant2 = new LOLParticipant();
+		participant1.setAccountId("징크스");
+		
+		LOLParticipant participant3 = new LOLParticipant();
+		participant1.setAccountId("바드");
+
+		LOLParticipant participant4 = new LOLParticipant();
+		participant1.setAccountId("가렌");
+		
+		LOLMatchDetail match1 = new LOLMatchDetail();
+		match1.setGameCreation(createDate(2021,1,1));
+		match1.addParticipants(participant1);
+		match1.addParticipants(participant2);
+
+		LOLMatchDetail match2 = new LOLMatchDetail();
+		match2.setGameCreation(createDate(2021,1,10));
+		match2.addParticipants(participant3);
+		
+
+		LOLMatchDetail match3 = new LOLMatchDetail();
+		match3.setGameCreation(createDate(2021,1,20));
+		match3.addParticipants(participant4);
+		
+		lolParticipant.save(participant1);
+		lolParticipant.save(participant2);
+		lolParticipant.save(participant3);
+		lolParticipant.save(participant4);
+		lolMatch.save(match1);
+		lolMatch.save(match2);
+		lolMatch.save(match3);
+		
+		List<LOLMatchDetail> participantList = lolMatch.findByAccountIdAndBetweenGameCreation("가렌", createDate(2020,12,1), createDate(2021,1,5)); 
+		
+		assertThat(participantList.size()).isEqualTo(1);
+	}
+	
+	@Test
+	@DisplayName("TFT 매치 디테일 날짜에 따른 조회")
+	public void tftParticipantTest() {
+
+		TFTParticipant participant1 = TFTParticipant.builder()
 									.puuid("ASD123")
 									.timeEliminated(new Date(2358))
 									.build();
 
-		TFTMatchDetail detail2 = TFTMatchDetail.builder()
+		TFTParticipant participant2 = TFTParticipant.builder()
 									.puuid("ASD123")
 									.timeEliminated(new Date(2253))
 									.build();
 
-		TFTMatchDetail detail3 = TFTMatchDetail.builder()
+		TFTParticipant participant3 = TFTParticipant.builder()
 									.puuid("ASD123")
 									.timeEliminated(new Date(2213))
 									.build();
 		
 		TFTMatch match1 = new TFTMatch();
 		match1.setMatchId("AAA");
-		match1.addMatchDetails(detail1);
+		match1.addParticipants(participant1);
 		match1.setGameDatetime(createDate(2021,1,1));
 
 		TFTMatch match2 = new TFTMatch();
 		match2.setMatchId("BBB");
-		match2.addMatchDetails(detail2);
+		match2.addParticipants(participant2);
 		match2.setGameDatetime(createDate(2021,1,2));
 
 		TFTMatch match3 = new TFTMatch();
 		match3.setMatchId("CCC");
-		match3.addMatchDetails(detail3);
+		match3.addParticipants(participant3);
 		match3.setGameDatetime(createDate(2021,1,3));
 
 		TFTMatch savedMatch1 = tftMatch.save(match1);
 		TFTMatch savedMatch2 = tftMatch.save(match2);
 		TFTMatch savedMatch3 = tftMatch.save(match3);
-		TFTMatchDetail savedDetail1 = tftDetail.save(detail1);
-		TFTMatchDetail savedDetail2 = tftDetail.save(detail2);
-		TFTMatchDetail savedDetail3 = tftDetail.save(detail3);
+		TFTParticipant savedParticipant1 = tftParticipant.save(participant1);
+		TFTParticipant savedParticipant2 = tftParticipant.save(participant2);
+		TFTParticipant savedParticipant3 = tftParticipant.save(participant3);
 
-		List<TFTMatchDetail> detailList = tftDetail.findByPuuidAndBetweenGameDatetime("ASD123", createDate(2020,12,1), createDate(2021,1,2));
+		List<TFTParticipant> participantList = tftParticipant.findByPuuidAndBetweenGameDatetime("ASD123", createDate(2020,12,1), createDate(2021,1,2));
 		
-		//Page<TFTMatchDetail> detailList = tftDetail.findByPuuid("ASD123", page);
+		//Page<TFTParticipant> participantList = tftParticipant.findByPuuid("ASD123", page);
 		
-		assertThat(detailList.size()).isEqualTo(2);
+		assertThat(participantList.size()).isEqualTo(2);
 		
 	}
 	
@@ -117,24 +170,24 @@ public class StatisticsTest {
 	@DisplayName("EAGER 조회")
 	public void tftMatchTest() {
 		
-		TFTMatchDetail participants1 = TFTMatchDetail.builder()
+		TFTParticipant participants1 = TFTParticipant.builder()
 									.puuid("ASD123")
 									.timeEliminated(new Date(2358))
 									.build();
 
-		TFTMatchDetail participants2 = TFTMatchDetail.builder()
+		TFTParticipant participants2 = TFTParticipant.builder()
 									.puuid("AWRD23")
 									.timeEliminated(new Date(2253))
 									.build();
 
 		TFTMatch match = new TFTMatch();
 		match.setMatchId("AAA");
-		match.addMatchDetails(participants1);
-		match.addMatchDetails(participants2);
+		match.addParticipants(participants1);
+		match.addParticipants(participants2);
 		
 		TFTMatch savedMatch = tftMatch.save(match);
-		TFTMatchDetail savedDetail1 = tftDetail.save(participants1);
-		TFTMatchDetail savedDetail2 = tftDetail.save(participants2);
+		TFTParticipant savedparticipant1 = tftParticipant.save(participants1);
+		TFTParticipant savedparticipant2 = tftParticipant.save(participants2);
 		
 		PageRequest page = PageRequest.of(0, 10);
 		Page<TFTMatch> allMatches = tftMatch.findByMatchId("AAA", page);

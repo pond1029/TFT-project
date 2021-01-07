@@ -27,7 +27,7 @@ import com.jylee.tft.statistic.domain.TFTMatch;
 
 public interface TFTMatchRepository extends JpaRepository<TFTMatch, Long>{
 
-	@EntityGraph(attributePaths = "matchDetails")
+	@EntityGraph(attributePaths = "participants")
 	public abstract Page<TFTMatch> findByMatchId(String matchId, Pageable pageable);
 	
 	public abstract TFTMatch save(TFTMatch tftMatch);

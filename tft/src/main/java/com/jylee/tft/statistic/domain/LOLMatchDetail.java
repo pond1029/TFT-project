@@ -10,13 +10,15 @@
 package com.jylee.tft.statistic.domain;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +43,6 @@ public class LOLMatchDetail {
 
 	@Id @GeneratedValue
 	private Long lolMatchDetailId;
-	private Long gameId;
 	private Long queueId;
 	private String gameType;
 	@Temporal(TemporalType.TIME)
@@ -53,4 +54,17 @@ public class LOLMatchDetail {
 	private String gameVersion;
 	private Long mapId;
 	private String gameMode;
+	private Long gameId;
+	@OneToMany(mappedBy = "game")
+	private Set<LOLParticipant> participants = new HashSet<>();
+	
+	public void addParticipants(LOLParticipant lolParticipant) {
+		this.getParticipants().add(lolParticipant);	
+		lolParticipant.setGame(this);	
+	}
+	
+	public void removeParticipants(LOLParticipant lolParticipant) {
+		this.getParticipants().remove(lolParticipant);
+		lolParticipant.setGame(null);
+	}
 }

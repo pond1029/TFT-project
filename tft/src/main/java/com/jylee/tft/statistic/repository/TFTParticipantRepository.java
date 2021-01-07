@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.jylee.tft.statistic.domain.TFTMatchDetail;
+import com.jylee.tft.statistic.domain.TFTParticipant;
 
 /**
   * @Package : com.jylee.tft.statistic.repository
@@ -29,13 +29,13 @@ import com.jylee.tft.statistic.domain.TFTMatchDetail;
   * @Information :
   */
 
-public interface TFTMatchDetailRepository extends JpaRepository<TFTMatchDetail, Long>{
+public interface TFTParticipantRepository extends JpaRepository<TFTParticipant, Long>{
 	
 	@EntityGraph(attributePaths = "match")
-	@Query("SELECT t FROM TFTMatchDetail t WHERE t.puuid = ?1 AND t.match IN (SELECT m FROM TFTMatch m WHERE m.gameDatetime >= ?2 AND m.gameDatetime <= ?3)")
-	public abstract List<TFTMatchDetail> findByPuuidAndBetweenGameDatetime(String puuid, Date st, Date end);
+	@Query("SELECT p FROM TFTParticipant p WHERE p.puuid = ?1 AND p.match IN (SELECT m FROM TFTMatch m WHERE m.gameDatetime >= ?2 AND m.gameDatetime <= ?3)")
+	public abstract List<TFTParticipant> findByPuuidAndBetweenGameDatetime(String puuid, Date from, Date to);
 
-	public abstract TFTMatchDetail save(TFTMatchDetail tftMatchDetail);
+	public abstract TFTParticipant save(TFTParticipant tftParticipant);
 	
-	public abstract Page<TFTMatchDetail> findByPuuid(String puuid, Pageable pageable);
+	public abstract Page<TFTParticipant> findByPuuid(String puuid, Pageable pageable);
 }

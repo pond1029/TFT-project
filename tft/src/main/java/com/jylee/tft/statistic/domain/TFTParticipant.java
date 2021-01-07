@@ -21,10 +21,10 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TFTMatchDetail {
+public class TFTParticipant {
 
 	@Id @GeneratedValue
-	private Long tftMatchDetailId;
+	private Long tftParticipantId;
 	private Long goldLeft;
 	private Long lastRound;
 	private Long level;

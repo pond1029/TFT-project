@@ -16,13 +16,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
-import com.jylee.tft.statistic.domain.TFTMatchDetail;
+import com.jylee.tft.statistic.domain.TFTParticipant;
+import com.jylee.tft.statistic.domain.Account;
 import com.jylee.tft.statistic.domain.Figure;
+import com.jylee.tft.statistic.domain.LOLMatchDetail;
+import com.jylee.tft.statistic.domain.LOLParticipant;
 import com.jylee.tft.statistic.domain.Period;
 import com.jylee.tft.statistic.domain.PeriodFigure;
 import com.jylee.tft.statistic.domain.Summoner;
+import com.jylee.tft.statistic.repository.LOLMatchDetailRepository;
+import com.jylee.tft.statistic.repository.LOLParticipantRepository;
 import com.jylee.tft.statistic.repository.SummonerRepository;
-import com.jylee.tft.statistic.repository.TFTMatchDetailRepository;
+import com.jylee.tft.statistic.repository.TFTParticipantRepository;
 
 /**
   * @Package : com.jylee.tft.statistic
@@ -36,32 +41,41 @@ import com.jylee.tft.statistic.repository.TFTMatchDetailRepository;
 public class PeriodStatistics implements Statistics{
 
 	@Autowired
-	TFTMatchDetailRepository matchDetail;
-	
+	TFTParticipantRepository tft;
+
 	@Autowired
-	SummonerRepository summoner;
+	LOLMatchDetailRepository lol;
 	
-	public Figure getStatistics(String userId, Period period) {	
-
+	public Figure getStatistics(Account account, Period period) {	
 		PeriodFigure figure = new PeriodFigure();	
-		Optional<Summoner> user = summoner.findByName(userId);		
 		
-		Summoner userInfo = user.orElseGet(()->retrieveSummoner(userId));
-
-		List<TFTMatchDetail> matchDetailList = matchDetail.findByPuuidAndBetweenGameDatetime(userInfo.getPuuid(), period.getFrom(), period.getTo());
-		
-		//TODO n+1 select가 일어나는지 확인
-		for(TFTMatchDetail tFTMatchDetail : matchDetailList) {			
-			Date gameDate = tFTMatchDetail.getMatch().getGameDatetime();
-			Date timeEliminated = tFTMatchDetail.getTimeEliminated();
-			figure.setFigure(gameDate, timeEliminated.getTime());
+		if(account.getType().equals("TFT")) {
+			List<TFTParticipant> playTimes = tft.findByPuuidAndBetweenGameDatetime(account.getApiId(), period.getFrom(), period.getTo());
+			//TODO n+1 select가 일어나는지 확인
+			for(TFTParticipant participant : playTimes) {			
+				Date date = participant.getMatch().getGameDatetime();
+				Date time = participant.getTimeEliminated();
+				figure.setFigure(date, time.getTime());
+			}
 		}
+		if(account.getType().equals("LOL")) {
+			List<LOLMatchDetail> playTimes = lol.findByAccountIdAndBetweenGameCreation(account.getApiId(), period.getFrom(), period.getTo());
+			//TODO n+1 select가 일어나는지 확인
+			for(LOLMatchDetail detail : playTimes) {			
+				Date date = detail.getGameCreation();
+				Date time = detail.getGameDuration();
+				figure.setFigure(date, time.getTime());
+			}
+		}
+		
+		
 		
 		return figure;
 	}
 	
-	private Summoner retrieveSummoner(String userId) {
-		return null;
+	private void findByType(Account account) {
+		
 	}
+	
 
 }

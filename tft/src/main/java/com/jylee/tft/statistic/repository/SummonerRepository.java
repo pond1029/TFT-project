@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.jylee.tft.statistic.domain.RiotType;
 import com.jylee.tft.statistic.domain.Summoner;
 import com.jylee.tft.statistic.domain.SummonerPuuid;
 
@@ -29,7 +30,7 @@ public interface SummonerRepository extends JpaRepository<Summoner, Long>{
 	
 	public abstract Summoner save(Summoner summoner);
 	
-	public abstract Optional<Summoner> findByName(String name);
+	public abstract Optional<Summoner> findByNameAndType(String name,RiotType type);
 	
 	public abstract Optional<SummonerPuuid> findPuuidByName(String name);
 

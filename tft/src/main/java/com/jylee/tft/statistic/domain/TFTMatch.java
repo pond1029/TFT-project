@@ -37,15 +37,15 @@ public class TFTMatch {
 	private Long queueId;
 	private Long tftSetNumber;
 	@OneToMany(mappedBy = "match")
-	private Set<TFTMatchDetail> matchDetails = new HashSet<>();
+	private Set<TFTParticipant> participants = new HashSet<>();
 	
-	public void addMatchDetails(TFTMatchDetail matchDetail) {
-		this.getMatchDetails().add(matchDetail);
-		matchDetail.setMatch(this);
+	public void addParticipants(TFTParticipant tftParticipant) {
+		this.getParticipants().add(tftParticipant);
+		tftParticipant.setMatch(this);
 	}
 	
-	public void removeMatchDetails(TFTMatchDetail matchDetail) {
-		this.getMatchDetails().remove(matchDetail);
-		matchDetail.setMatch(null);
+	public void removeParticipants(TFTParticipant tftParticipant) {
+		this.getParticipants().remove(tftParticipant);
+		tftParticipant.setMatch(null);
 	}
 }

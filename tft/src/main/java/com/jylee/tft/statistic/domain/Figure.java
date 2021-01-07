@@ -9,15 +9,13 @@
 
 package com.jylee.tft.statistic.domain;
 
-import java.util.Map;
-
 /**
   * @Package : com.jylee.tft.statistic
   * @FileName : Graph.java
   * @Date : 2021. 1. 4. 
   * @Author : "LeeJaeYeon"
   * @Version :
-  * @Information :
+  * @Information : 통계 산출 수치
   */
 
 public interface Figure {

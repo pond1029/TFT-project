@@ -15,7 +15,7 @@ package com.jylee.tft.statistic.domain;
   * @Date : 2020. 12. 21. 
   * @Author : "LeeJaeYeon"
   * @Version :
-  * @Information :
+  * @Information : API 정보
   */
 
 public interface APIInformation {

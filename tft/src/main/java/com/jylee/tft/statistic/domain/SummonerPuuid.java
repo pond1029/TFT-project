@@ -15,7 +15,7 @@ package com.jylee.tft.statistic.domain;
   * @Date : 2021. 1. 7. 
   * @Author : "LeeJaeYeon"
   * @Version :
-  * @Information :
+  * @Information : 소환사 puuid
   */
 
 public interface SummonerPuuid {
