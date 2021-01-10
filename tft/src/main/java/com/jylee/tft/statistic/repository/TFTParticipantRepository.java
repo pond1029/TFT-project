@@ -9,8 +9,9 @@
 
 package com.jylee.tft.statistic.repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +34,7 @@ public interface TFTParticipantRepository extends JpaRepository<TFTParticipant, 
 	
 	@EntityGraph(attributePaths = "match")
 	@Query("SELECT p FROM TFTParticipant p WHERE p.puuid = ?1 AND p.match IN (SELECT m FROM TFTMatch m WHERE m.gameDatetime >= ?2 AND m.gameDatetime <= ?3)")
-	public abstract List<TFTParticipant> findByPuuidAndBetweenGameDatetime(String puuid, Date from, Date to);
+	public abstract Optional<List<TFTParticipant>> findByPuuidAndBetweenGameDatetime(String puuid, LocalDateTime from, LocalDateTime to);
 
 	public abstract TFTParticipant save(TFTParticipant tftParticipant);
 	

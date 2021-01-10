@@ -11,7 +11,7 @@
 	</parent>
   
 	<groupId>com.jylee.tft</groupId>
-	<artifactId>tft</artifactId>
+	<artifactId>tft</artifactId> 
 	<version>0.0.1-SNAPSHOT</version> 
 	<name>tft</name>
 	<packaging>war</packaging>
@@ -32,12 +32,7 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
-		
-		<dependency>
-	        <groupId>org.apache.tomcat.embed</groupId>
-	        <artifactId>tomcat-embed-jasper</artifactId>
-	    </dependency>
-	    
+			    
 	   	<!-- jdbc -->
 		<dependency>
 		    <groupId>mysql</groupId>
@@ -56,7 +51,12 @@
 		</dependency>
 						
 		<!-- spring boot -->
-		
+				
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

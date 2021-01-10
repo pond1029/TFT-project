@@ -14,10 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -28,28 +25,43 @@ import lombok.Setter;
   * @Version :
   * @Information :
   */
-@Configuration
-@ConfigurationProperties(prefix = "api.riot")
 @Component
 @Validated
-public class TFTAPIInformation implements APIInformation{
+@Configuration
+@Getter @Setter
+@ConfigurationProperties(prefix = "api.tft")
+public class TFTAPIInformation implements APIInformation {
 
-	private String urlKr;
-	private String urlAsia;
-	private String keyTft;
+	private final String SUMMONER_URL = "/tft/summoner/v1/summoners/by-name/{summonerName}";
+	private final String MATCHE_IDS_URL = "/tft/match/v1/matches/by-puuid/{puuid}/ids";
+	private final String MATCHES_URL = "/tft/match/v1/matches/{matchId}";
+	
+	private String key;
+	private String baseUrl;
+	private String asiaUrl;
 	
 	@Override
 	public String getBaseUrl() {
-		return this.urlKr;
+		return this.baseUrl;
 	}
 	
 	@Override
 	public String getKey() {
-		return this.keyTft;
+		return this.key;
 	}
 	
-	public String getMatchUrl() {
-		return this.urlAsia;
+	public String getAsiaUrl() {
+		return this.asiaUrl;
 	}
 	
+	public String getSummonerUrl(String summonerName) {
+		return getBaseUrl() + SUMMONER_URL.replace("{summonerName}", summonerName);
+	}
+
+	public String getMatchIdsUrl(String puuid) {
+		return getBaseUrl() + MATCHE_IDS_URL.replace("{puuid}", puuid);
+	}
+	public String getMatchesUrl(String matchId) {
+		return getBaseUrl() + MATCHES_URL.replace("{matchId}", matchId);
+	}
 }

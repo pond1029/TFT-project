@@ -1,7 +1,7 @@
 /**
   * @Package : com.jylee.tft.dao
   * @FileName : Period.java
-  * @Date : 2020. 11. 4. 
+  * @LocalDateTime : 2020. 11. 4. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
@@ -9,67 +9,61 @@
 
 package com.jylee.tft.statistic.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
   * @Package : com.jylee.tft.dao
   * @FileName : Period.java
-  * @Date : 2020. 11. 4. 
+  * @LocalDateTime : 2020. 11. 4. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information : 기간 데이터 (from ~ to)
   */
 
 @Getter @Setter
+@EqualsAndHashCode
 public class Period {
 
-	private Date from;
-	private Date to;
+	private LocalDateTime from;
+	private LocalDateTime to;
 			
-	public List<Date> splitByDay() { 
-		List<Date> dayLists = new ArrayList<Date>();		
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(from);	
-		while(!to.before(cal.getTime())) {
-			dayLists.add(cal.getTime());
-			cal.add(Calendar.DATE, 1);
+	public List<LocalDateTime> splitByDay() { 
+		List<LocalDateTime> dayLists = new ArrayList<LocalDateTime>();		
+		LocalDateTime day = LocalDateTime.of(from.toLocalDate(), from.toLocalTime());
+		while(day.isBefore(to)) {
+			dayLists.add(day);
+			day = day.plusDays(1);
 		}
 		return dayLists;
 	}
 	
-	public Period(Date from, Date to) {
+	public Period(LocalDateTime from, LocalDateTime to) {
 		this.from = from;
 		this.to = to;
 	}
 
 	public Period(int year) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, 0, 1);
-		this.from = cal.getTime();
-		cal.set(year, 11, 31);
-		this.to = cal.getTime();
+		LocalDateTime date = LocalDateTime.of(year,1,1,0,0);		
+		this.from = date;		
+		this.to = date.plusYears(1);
 	}
 
 	public Period(int year, int month) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month - 1, 1);
-		this.from = cal.getTime();
-		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
-		this.to = cal.getTime();		
+		LocalDateTime date = LocalDateTime.of(year,month,1,0,0);		
+		this.from = date;		
+		this.to = date.plusMonths(1);
 	}
 	
 	public Period(int year, int month, int day) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month - 1, day);
-		this.from = cal.getTime();
-		this.to = cal.getTime();
-		
+		LocalDateTime date = LocalDateTime.of(year,month,day,0,0);		
+		this.from = date;		
+		this.to = date.plusDays(1);		
 	}
 	
 }

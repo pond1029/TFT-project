@@ -1,6 +1,8 @@
 package com.jylee.tft.statistic.domain;
 
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,6 +13,7 @@ import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +21,7 @@ import lombok.Setter;
 @Entity
 @Builder
 @Getter @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Summoner {
@@ -48,7 +52,7 @@ public class Summoner {
 	/**
 	 * 최종 변경일
 	 */
-	private Long revisionDate;
+	private LocalDateTime revisionDate;
 	
 	/**
 	 * 소환사명
@@ -72,6 +76,11 @@ public class Summoner {
 	 */
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private RiotType type;
+	private AccountType type;
+	
+	/**
+	 * 데이터 업데이트 날짜
+	 */
+	private LocalDateTime updateDate;
 	
 }

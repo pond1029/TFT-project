@@ -9,6 +9,8 @@
 
 package com.jylee.tft.statistic.service;
 
+import java.util.List;
+
 import com.jylee.tft.statistic.domain.Account;
 import com.jylee.tft.statistic.domain.Figure;
 import com.jylee.tft.statistic.domain.Period;
@@ -33,5 +35,5 @@ public interface Statistics {
 	  * @param userId
 	  * @return
 	 */
-	public abstract Figure getStatistics(Account account, Period period);
+	public abstract Figure getStatistics(List<Account> accounts, Period period);
 }

@@ -9,6 +9,8 @@
 
 package com.jylee.tft.statistic.domain;
 
+import java.util.List;
+
 /**
   * @Package : com.jylee.tft.statistic.domain
   * @FileName : Account.java
@@ -19,9 +21,5 @@ package com.jylee.tft.statistic.domain;
   */
 
 public interface Account {
-
-	public abstract String getType();
-	public abstract String getId();
-	public abstract String getApiId();
-	
+	public abstract List<PlayTime> getPlayTimes(Period period);
 }

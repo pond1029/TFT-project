@@ -9,8 +9,6 @@
 
 package com.jylee.tft.statistic.domain;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,6 +16,7 @@ import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +32,7 @@ import lombok.Setter;
 @Entity
 @Builder
 @Getter @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class LOLParticipant {
@@ -40,14 +40,15 @@ public class LOLParticipant {
 	@Id @GeneratedValue
 	private Long lolParticipantId;
 	private String accountId;
-	private String currentAccountId;
-	private String currentPlatformId;
-	private String platformId;
-	private Long profileIcon;
-	private String summonerId;
-	private String summonerName;
+	private String lane;
+	private String role;
 	private String win;
+	private Long spell1;
+	private Long spell2;
+	private Long kills;
+	private Long deaths;
+	private Long assists;
 	@ManyToOne
-	private LOLMatchDetail game;
+	private LOLMatch game;
 	
 }

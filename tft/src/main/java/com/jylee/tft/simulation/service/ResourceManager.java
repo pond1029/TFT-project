@@ -11,8 +11,6 @@ package com.jylee.tft.simulation.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 /**
   * @Package : com.jylee.tft.service.simulation
   * @FileName : ResourceManager.java

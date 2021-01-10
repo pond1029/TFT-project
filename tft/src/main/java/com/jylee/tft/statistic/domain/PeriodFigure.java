@@ -11,15 +11,12 @@ package com.jylee.tft.statistic.domain;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.postgresql.jdbc2.optional.SimpleDataSource;
 
 import lombok.NoArgsConstructor;
 
@@ -34,19 +31,18 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class PeriodFigure implements Figure{
-	private final SimpleDateFormat sdf = new SimpleDateFormat("dd");
 	private Map<String, Long> figures = new HashMap<String, Long>();
 	
-	public void setFigure(Date label, long data) {		
-		this.figures.put(sdf.format(label), figures.getOrDefault(label, 0L) + data);
+	public void setFigure(LocalDate label, long data) {		
+		this.figures.put(label.toString(), figures.getOrDefault(label.toString(), 0L) + data);
 	}
 	
 	public PeriodFigure(Period period) {
 		//날짜 세팅
-		List<Date> dayList = period.splitByDay();
+		List<LocalDateTime> dayList = period.splitByDay();
 		
-		for(Date day : dayList) {
-			this.figures.put(sdf.format(day), 0L);
+		for(LocalDateTime day : dayList) {
+			this.figures.put(day.format(DateTimeFormatter.ofPattern("dd")), 0L);
 		}
 	}
 

@@ -18,7 +18,7 @@ package com.jylee.tft.statistic.domain;
   * @Information :
   */
 
-public enum RiotType {
+public enum AccountType {
 
 	LOL, TFT;
 	

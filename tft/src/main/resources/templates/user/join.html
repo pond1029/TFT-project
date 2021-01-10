@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<meta charset="UTF-8">
+<title>Join</title>
+</head>
+<body class = "bg-light">
+    <div th:replace="fragments.html :: main-nav"></div>
+        
+	<div class="container">        
+        <div class="row justify-content-center">     
+        
+	        <form class="needs-validation col-sm-6"
+	              th:action="@{/join}" th:object="${joinForm}" method="post">
+	              
+  				<div class="mb-3">
+		            <label for="nickname" class="form-label">Nickname</label>
+				    <input id="nickname" type="text" th:field="*{nickname}" required
+				    	class="form-control"  aria-describedby="nicknameHelp">
+				    <small id="nicknameHelp" class="form-text text-muted"> 공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.</small>                    
+	            </div>
+	            
+  				<div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+				    <input id="email" type="email" th:field="*{email}" required 
+				    	class="form-control" aria-describedby="emailHelp">
+				    <small id="emailHelp" class="form-text">We'll never share your email with anyone else.</small>                
+	            </div>
+				    
+  				<div class="mb-3">
+					<label for="password" class="form-label">Password</label>
+					<input id="password" type="password" th:field="*{password}" required
+						class="form-control" >                
+	            </div>
+					
+  				<div class="mb-3 d-md-flex justify-content-md-end">
+					<button class="btn btn-primary" type="submit">Submit</button>
+	            </div>
+	        </form>
+        </div>	
+        
+		<div class="fragments.html :: footer"></div>	
+	</div>
+
+    <script th:replace="fragments.html :: form-validation"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
