@@ -13,11 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.jylee.tft.statistic.domain.Account;
-import com.jylee.tft.statistic.domain.LOLAccount;
 import com.jylee.tft.statistic.domain.Period;
+import com.jylee.tft.statistic.service.DataManager;
+import com.jylee.tft.statistic.service.LOLAccountManager;
+import com.jylee.tft.statistic.service.TFTAccountManager;
 
 /**
   * @Package : com.jylee.tft
@@ -31,10 +33,22 @@ import com.jylee.tft.statistic.domain.Period;
 @SpringBootTest
 public class AccountTest {
 	
+	@Autowired
+	TFTAccountManager tftAccount;
+
+	@Autowired
+	LOLAccountManager lolAccount;
+	
 	@Test
 	@DisplayName("LOL 계정 정보 조회")
 	public void lolAccount() {
-		Account account = new LOLAccount("야방금무빙봤냐");
-		assertThat(account.getPlayTimes(new Period(2021, 1))).isNotEmpty();
+		assertThat(lolAccount.getPlayTimes("야방금무빙봤냐", new Period(2020, 12)).size()).isEqualTo(9);
+	}
+	
+	@Test
+	@DisplayName("TFT 계정 정보 조회")
+	public void tftAccount() {
+		assertThat(tftAccount.getPlayTimes("야방금무빙봤냐", new Period(2021, 1))).isEmpty();
+		
 	}
 }

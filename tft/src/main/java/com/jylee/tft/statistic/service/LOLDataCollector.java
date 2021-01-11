@@ -9,15 +9,10 @@
 
 package com.jylee.tft.statistic.service;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -31,7 +26,6 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.jylee.tft.statistic.domain.AccountType;
 import com.jylee.tft.statistic.domain.LOLAPIInformation;
 import com.jylee.tft.statistic.domain.LOLMatch;
@@ -53,7 +47,9 @@ import com.jylee.tft.util.PondUtils;
 
 @Service
 public class LOLDataCollector{
-
+	
+	private final int RETRIEVE_COUNT = 10;
+	private final int RETRIEVE_MAX = 50;
 	@Autowired
 	private SummonerRepository summonerRepository;	
 	@Autowired
@@ -61,10 +57,9 @@ public class LOLDataCollector{
 	@Autowired
 	private LOLParticipantRepository participantRepository;	
 	@Autowired
-	private LOLAPIInformation api;
-		
+	private LOLAPIInformation api;		
 	private final ObjectMapper mapper = new ObjectMapper();
-
+	
 	@Transactional
 	public Summoner getSummoner(String summonerName){	
 		String response = this.send(api.getSummonerUrl(summonerName), null);
@@ -91,87 +86,104 @@ public class LOLDataCollector{
 	
 	@Transactional
 	public List<LOLMatch> update(String apiId) {
-		List<LOLMatch> matches = getMatches(apiId);
-		
-		for (LOLMatch lolMatch : matches) {
-			fillDetail(lolMatch);
-		}
-		
-		return matchRepository.saveAll(matches);
-	}
-
-	public List<LOLMatch> getMatches(String apiId) {
-		String response = this.send(api.getMatchListsUrl(apiId), null);		
-		Map<String, Object> responseMap;
 		try {
-			List<LOLMatch> matches = new ArrayList<LOLMatch>();
-			responseMap = mapper.readValue(response, Map.class);
-			List<Map<String, Object>> responseMatches = (List<Map<String, Object>>) responseMap.get("matches");
-			
-			Page<LOLMatch> games = matchRepository.findDescgameCreation(PageRequest.of(0, responseMatches.size()));			
-						
-			for (Map<String, Object> map : responseMatches) {
-				Long gameId = PondUtils.getLong(map,"gameId");				
-				if(games.get().parallel().anyMatch(m-> m.getGameId().equals(gameId))) break;
-
-				LOLParticipant participant = new LOLParticipant();
-				participant.setRole(PondUtils.getString(map,"role"));
-				participant.setLane(PondUtils.getString(map,"lane"));		
-				participant.setAccountId(apiId);
-				
-				LOLMatch lolMatch = new LOLMatch();
-				lolMatch.setPlatformId(PondUtils.getString(map,"platformId"));
-				lolMatch.setGameId(gameId);
-				lolMatch.setQueue(PondUtils.getLong(map,"queue"));
-				lolMatch.setSeason(PondUtils.getLong(map,"season"));
-				lolMatch.addParticipants(participant);
-				
-				matches.add(lolMatch);
-			}
-			
-			return matches;
+			List<LOLMatch> matches = getMatches(apiId);		
+			for (LOLMatch lolMatch : matches) {
+				fillDetail(lolMatch);
+			}		
+			return matchRepository.saveAll(matches);
 		} catch (JsonProcessingException e) {
-			
-		}
-		
+		}		
 		return null;
 	}
-	
-	private void fillDetail(LOLMatch lolMatch) {		
-		String response = this.send(api.getMatchesUrl(lolMatch.getGameId().toString()), null);	
-		try {
-			Map<String, Object> matchDetail = mapper.readValue(response, Map.class);
+
+	private List<LOLMatch> getMatches(String apiId) throws JsonMappingException, JsonProcessingException {
+		List<LOLMatch> matches = new ArrayList<LOLMatch>();
+		List<Map<String, Object>> inputMatches = inputMatches(apiId);
+		for (Map<String, Object> inputMatch : inputMatches) {
+			Long gameId = PondUtils.getLong(inputMatch,"gameId");				
+
+			LOLParticipant participant = new LOLParticipant();
+			participant.setRole(PondUtils.getString(inputMatch,"role"));
+			participant.setLane(PondUtils.getString(inputMatch,"lane"));		
+			participant.setAccountId(apiId);
 			
-			for (LOLParticipant participant : lolMatch.getParticipants()) {
-				int participantId = 
-						this.findParticipantId((List<Map<String, Object>>) matchDetail.get("participantIdentities"), participant.getAccountId());
-				Map<String, Object> participantData = 
-						this.getParticipant((List<Map<String, Object>>) matchDetail.get("participants"), participantId);
-				String win = 
-						this.getWin((List<Map<String, Object>>) matchDetail.get("teams"), PondUtils.getInteger(participantData,"teamId"));
-				Map<String, Object> stats = (Map<String, Object>) participantData.get("stats");				
-				participant.setKills(PondUtils.getLong(stats,"kills"));
-				participant.setDeaths(PondUtils.getLong(stats,"assists"));
-				participant.setAssists(PondUtils.getLong(stats,"deaths"));
-				participant.setSpell1(PondUtils.getLong(participantData,"spell1Id"));
-				participant.setSpell2(PondUtils.getLong(participantData,"spell2Id"));
-				participant.setWin(win);
-			}
-					
-			lolMatch.setGameMode(PondUtils.getString(matchDetail,"gameMode"));
-			lolMatch.setGameType(PondUtils.getString(matchDetail,"gameType"));
-			lolMatch.setGameCreation(PondUtils.longToDateTime(PondUtils.getLong(matchDetail,"gameCreation")));		
-			lolMatch.setGameDuration(PondUtils.intToTime(PondUtils.getInteger(matchDetail,"gameDuration")));			
-			lolMatch.setGameVersion(PondUtils.getString(matchDetail,"gameVersion"));
-			lolMatch.setMapId(PondUtils.getLong(matchDetail,"mapId"));
+			LOLMatch lolMatch = new LOLMatch();
+			lolMatch.setPlatformId(PondUtils.getString(inputMatch,"platformId"));
+			lolMatch.setGameId(gameId);
+			lolMatch.setQueue(PondUtils.getLong(inputMatch,"queue"));
+			lolMatch.setSeason(PondUtils.getLong(inputMatch,"season"));
+			lolMatch.addParticipants(participant);
 			
-		} catch (JsonProcessingException e) {
-			
-		}	
+			matches.add(lolMatch);
+		}
 		
+		return matches;
 	}
 	
-	private String getWin(List<Map<String, Object>> teams, int teamId) {
+	private List<Map<String, Object>> inputMatches(String apiId) throws JsonMappingException, JsonProcessingException {
+		int beginIndex = 0;
+		int endIndex = RETRIEVE_COUNT;
+		List<Map<String, Object>> inputMatches = new ArrayList<>();
+		
+		while(endIndex <= RETRIEVE_MAX) {
+			Map<String, Object> parameter = new HashMap<String, Object>();
+			parameter.put("beginIndex", beginIndex);
+			parameter.put("endIndex", endIndex);
+			String response = this.send(api.getMatchListsUrl(apiId), parameter);	
+			Page<LOLMatch> games = matchRepository.findRecent(apiId, PageRequest.of(0, endIndex));	
+			
+			Map<String, Object> responseMap = mapper.readValue(response, Map.class);
+			List<Map<String, Object>> responseMatches = (List<Map<String, Object>>) responseMap.get("matches");
+
+			for (Map<String, Object> map : responseMatches) {
+				Long gameId = PondUtils.getLong(map,"gameId");		
+				if(games.get().parallel().anyMatch(m-> m.getGameId().equals(gameId))) {
+					return inputMatches;
+				}
+				inputMatches.add(map);
+			}
+			beginIndex = endIndex;
+			endIndex += RETRIEVE_COUNT;
+		}
+		
+		return inputMatches;
+	}
+	
+	@Transactional
+	private void fillDetail(LOLMatch lolMatch) throws JsonMappingException, JsonProcessingException {		
+		String response = this.send(api.getMatchesUrl(lolMatch.getGameId().toString()), null);	
+		Map<String, Object> matchDetail = mapper.readValue(response, Map.class);
+		
+		for (LOLParticipant participant : lolMatch.getParticipants()) {
+			int participantId = 
+					this.parseParticipantId((List<Map<String, Object>>) matchDetail.get("participantIdentities"), participant.getAccountId());
+			Map<String, Object> participantData = 
+					this.parsetParticipant((List<Map<String, Object>>) matchDetail.get("participants"), participantId);
+			String win = 
+					this.parseWin((List<Map<String, Object>>) matchDetail.get("teams"), PondUtils.getInteger(participantData,"teamId"));
+			Map<String, Object> stats = (Map<String, Object>) participantData.get("stats");				
+			participant.setKills(PondUtils.getLong(stats,"kills"));
+			participant.setDeaths(PondUtils.getLong(stats,"assists"));
+			participant.setAssists(PondUtils.getLong(stats,"deaths"));
+			participant.setSpell1(PondUtils.getLong(participantData,"spell1Id"));
+			participant.setSpell2(PondUtils.getLong(participantData,"spell2Id"));
+			participant.setWin(win);
+			participant.setGame(lolMatch);
+			
+			participantRepository.save(participant);
+		}
+				
+		lolMatch.setGameMode(PondUtils.getString(matchDetail,"gameMode"));
+		lolMatch.setGameType(PondUtils.getString(matchDetail,"gameType"));
+		lolMatch.setGameCreation(PondUtils.longToDateTime(PondUtils.getLong(matchDetail,"gameCreation")));		
+		lolMatch.setGameDuration(PondUtils.longToTime(PondUtils.getLong(matchDetail,"gameDuration")));			
+		lolMatch.setGameVersion(PondUtils.getString(matchDetail,"gameVersion"));
+		lolMatch.setMapId(PondUtils.getLong(matchDetail,"mapId"));
+			
+	}
+	
+	private String parseWin(List<Map<String, Object>> teams, int teamId) {
 		for (Map<String, Object> team : teams) {
 			if(teamId == PondUtils.getInteger(team,"teamId")){
 				return PondUtils.getString(team,"win");
@@ -180,7 +192,7 @@ public class LOLDataCollector{
 		return "";
 	}
 	
-	private Map<String, Object> getParticipant(List<Map<String, Object>> participants, int participantId) {
+	private Map<String, Object> parsetParticipant(List<Map<String, Object>> participants, int participantId) {
 		for (Map<String, Object> participant : participants) {
 			if(participantId == PondUtils.getInteger(participant,"participantId")){
 				return participant;
@@ -189,7 +201,7 @@ public class LOLDataCollector{
 		return null;
 	}
 
-	private int findParticipantId(List<Map<String, Object>> participantIdentities, String accountId) {
+	private int parseParticipantId(List<Map<String, Object>> participantIdentities, String accountId) {
 		for (Map<String, Object> user : participantIdentities) {
 			Map<String, Object> player = (Map<String, Object>) user.get("player");
 			if(accountId.equals(PondUtils.getString(player,"accountId"))) {
@@ -199,9 +211,8 @@ public class LOLDataCollector{
 		
 		return 0;
 	}
-
 	
-	public String getParticipants(String apiId, Map<String, Object> parameters) {
+	private String getParticipants(String apiId, Map<String, Object> parameters) {
 		return this.send(api.getMatchesUrl(apiId), parameters);		
 	}
 	

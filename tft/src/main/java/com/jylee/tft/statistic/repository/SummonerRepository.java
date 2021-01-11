@@ -15,7 +15,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.jylee.tft.statistic.domain.AccountType;
 import com.jylee.tft.statistic.domain.Summoner;
-import com.jylee.tft.statistic.domain.SummonerPuuid;
 
 /**
   * @Package : com.jylee.tft.statistic.repository
@@ -32,6 +31,4 @@ public interface SummonerRepository extends JpaRepository<Summoner, Long>{
 	
 	public abstract Optional<Summoner> findByNameAndType(String name,AccountType type);
 	
-	public abstract Optional<SummonerPuuid> findPuuidByName(String name);
-
 }

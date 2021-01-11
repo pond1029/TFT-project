@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.jylee.tft.statistic.domain.LOLMatch;
 
@@ -32,13 +33,13 @@ import com.jylee.tft.statistic.domain.LOLMatch;
 public interface LOLMatchRepository extends JpaRepository<LOLMatch, Long>{
 
 	public abstract LOLMatch save(LOLMatch lolMatch);
-	
-	@Query("SELECT p.game FROM LOLParticipant p WHERE p.accountId = ?1 AND p.game IN(SELECT m FROM LOLMatch m WHERE m.gameCreation >= ?2 AND m.gameCreation <= ?3)")
-	public abstract Optional<List<LOLMatch>> findByAccountIdAndBetweenGameCreation(String accountId, LocalDateTime from, LocalDateTime to);
+		
+	@Query("SELECT p.game FROM LOLParticipant p WHERE p.accountId = :accountId AND p.game IN(SELECT m FROM LOLMatch m WHERE m.gameCreation >= :from AND m.gameCreation <= :to)")
+	public abstract Optional<List<LOLMatch>> findByAccountIdAndBetweenGameCreation(@Param("accountId") String accountId, @Param("from")LocalDateTime from, @Param("to")LocalDateTime to);
 	
 	public abstract Optional<LOLMatch> findByGameId(Long gameId);
 	
-	public abstract Page<LOLMatch> findDescgameCreation(Pageable pageable);
+	@Query("SELECT m FROM LOLMatch m LEFT JOIN m.participants LOLParticipant WHERE LOLParticipant.accountId = :accountId ORDER BY m.gameCreation")
+	public abstract Page<LOLMatch> findRecent(@Param("accountId") String accountId, Pageable pageable);
 	
-	public abstract List<LOLMatch> saveAll(List<LOLMatch> lolMatches);
 }

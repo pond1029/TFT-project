@@ -1,7 +1,7 @@
 /**
   * @Package : com.jylee.tft.statistic.domain
   * @FileName : Account.java
-  * @Date : 2021. 1. 8. 
+  * @Date : 2021. 1. 12. 
   * @Author : "LeeJaeYeon"
   * @Version :
   * @Information :
@@ -9,17 +9,25 @@
 
 package com.jylee.tft.statistic.domain;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
   * @Package : com.jylee.tft.statistic.domain
   * @FileName : Account.java
-  * @Date : 2021. 1. 8. 
+  * @Date : 2021. 1. 12. 
   * @Author : "LeeJaeYeon"
   * @Version :
-  * @Information : 조회할 계정에 대한 정보
+  * @Information :
   */
 
-public interface Account {
-	public abstract List<PlayTime> getPlayTimes(Period period);
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Account {
+
+	private AccountType type;
+	private String id;
+	
 }

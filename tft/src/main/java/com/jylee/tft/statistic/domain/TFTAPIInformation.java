@@ -55,13 +55,13 @@ public class TFTAPIInformation implements APIInformation {
 	}
 	
 	public String getSummonerUrl(String summonerName) {
-		return getBaseUrl() + SUMMONER_URL.replace("{summonerName}", summonerName);
+		return this.getBaseUrl() + SUMMONER_URL.replace("{summonerName}", summonerName);
 	}
 
 	public String getMatchIdsUrl(String puuid) {
-		return getBaseUrl() + MATCHE_IDS_URL.replace("{puuid}", puuid);
+		return this.getAsiaUrl() + MATCHE_IDS_URL.replace("{puuid}", puuid);
 	}
 	public String getMatchesUrl(String matchId) {
-		return getBaseUrl() + MATCHES_URL.replace("{matchId}", matchId);
+		return this.getAsiaUrl() + MATCHES_URL.replace("{matchId}", matchId);
 	}
 }

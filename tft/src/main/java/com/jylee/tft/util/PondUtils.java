@@ -121,6 +121,9 @@ public interface PondUtils {
 		return LocalTime.of(0, 0, seconds);
 	}
 
+	public static LocalTime longToTime(Long mileSeconds) {
+		return LocalTime.ofNanoOfDay(mileSeconds);
+	}
 	
 
 

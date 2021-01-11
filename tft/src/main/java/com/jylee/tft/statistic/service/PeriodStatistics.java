@@ -10,7 +10,12 @@
 package com.jylee.tft.statistic.service;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.jylee.tft.statistic.domain.Account;
+import com.jylee.tft.statistic.domain.AccountType;
 import com.jylee.tft.statistic.domain.Figure;
 import com.jylee.tft.statistic.domain.Period;
 import com.jylee.tft.statistic.domain.PeriodFigure;
@@ -25,15 +30,33 @@ import com.jylee.tft.statistic.domain.PlayTime;
   * @Information : TFT 통계
   */
 
+@Service
 public class PeriodStatistics implements Statistics{
+	
+	@Autowired
+	LOLAccountManager lol;
+	
+	@Autowired
+	TFTAccountManager tft;
 	
 	@Override
 	public Figure getStatistics(List<Account> accounts, Period period) {	
-		PeriodFigure figure = new PeriodFigure();	
+		PeriodFigure figure = new PeriodFigure();
+		
 		for(Account account : accounts) {
-			List<PlayTime> playTimes = account.getPlayTimes(period);
-			for(PlayTime play : playTimes) {
-				figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
+			
+			if(account.getType().equals(AccountType.LOL)) {
+				List<PlayTime> playTimes = lol.getPlayTimes(account.getId(), period);
+				for(PlayTime play : playTimes) {
+					figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
+				}				
+			}
+			if(account.getType().equals(AccountType.TFT)) {
+				List<PlayTime> playTimes = tft.getPlayTimes(account.getId(), period);
+				for(PlayTime play : playTimes) {
+					figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
+				}				
+				
 			}
 		}
 				

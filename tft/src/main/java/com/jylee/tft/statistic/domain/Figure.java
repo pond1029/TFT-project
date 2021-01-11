@@ -22,5 +22,6 @@ public interface Figure {
 	
 	public abstract String[] gatLabel();
 	public abstract long[] getData();
+	public abstract long getTotalData();
 	
 }

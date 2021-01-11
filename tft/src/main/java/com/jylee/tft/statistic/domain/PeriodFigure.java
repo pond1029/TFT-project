@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +62,12 @@ public class PeriodFigure implements Figure{
 		}
 		
 		return dataArray;
+	}
+
+	@Override
+	public long getTotalData() {
+		long[] datas = this.getData();
+		return Arrays.stream(datas).sum();
 	}
 	
 }

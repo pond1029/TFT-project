@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +39,6 @@ import lombok.Setter;
 @Entity
 @Builder
 @Getter @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class LOLMatch {
@@ -53,6 +54,7 @@ public class LOLMatch {
 	private String gameVersion;
 	private Long mapId;
 	private String gameMode;
+	@Column(unique = true)
 	private Long gameId;
 	@OneToMany(mappedBy = "game")
 	private Set<LOLParticipant> participants = new HashSet<>();

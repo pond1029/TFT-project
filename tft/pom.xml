@@ -20,7 +20,7 @@
 		<java.version>11</java.version>
 	</properties>
 
-	<dependencies>	
+	<dependencies>		
 		<!-- util -->
 	    <dependency>
 	      <groupId>org.projectlombok</groupId>
