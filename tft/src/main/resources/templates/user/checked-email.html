@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body class = "bg-light">
+    <div th:replace="fragments.html :: main-nav"></div>
+	
+    <div class="py-5 text-center" th:if="${error}">
+        <p class="lead">Email check</p>
+        <div class="alert alert-danger" role="alert">
+            Email link is wrong.
+        </div>
+    </div>
+
+    <div class="py-5 text-center" th:if="${error == null}">
+        <p class="lead">Email check</p>
+        <h2>
+           	Your email is checked. 
+           	<span th:text="${numberOfUser}"></span> users with you,
+            welcome <span th:text="${nickname}"></span>.
+        </h2>
+        <small class="text-info">You can login use nickname or email</small>
+    </div>
+
+    <div class="fragments.html :: footer"></div>
+</body>
+</html>

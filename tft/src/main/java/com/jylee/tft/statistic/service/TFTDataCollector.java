@@ -18,7 +18,6 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +37,8 @@ import com.jylee.tft.statistic.repository.TFTMatchRepository;
 import com.jylee.tft.statistic.repository.TFTParticipantRepository;
 import com.jylee.tft.util.PondUtils;
 
+import lombok.RequiredArgsConstructor;
+
 /**
   * @Package : com.jylee.tft.statistic.service
   * @FileName : TFTDataCollector.java
@@ -48,20 +49,16 @@ import com.jylee.tft.util.PondUtils;
   */
 
 @Service
+@RequiredArgsConstructor
 public class TFTDataCollector{
 	
-	private final int RETRIEVE_MAX = 10;
-	private final int RETRIEVE_COUNT = 50;
-
-	@Autowired
-	TFTAPIInformation api;
-	@Autowired
-	private SummonerRepository summonerRepository;	
-	@Autowired
-	private TFTMatchRepository matchRepository;	
-	@Autowired
-	private TFTParticipantRepository participantRepository;	
-	private final ObjectMapper mapper = new ObjectMapper();
+	private int RETRIEVE_MAX = 10;
+	private int RETRIEVE_COUNT = 50;
+	private final TFTAPIInformation api;
+	private final  SummonerRepository summonerRepository;	
+	private final  TFTMatchRepository matchRepository;	
+	private final  TFTParticipantRepository participantRepository;	
+	private ObjectMapper mapper = new ObjectMapper();
 		
 	@Transactional
 	public Summoner getSummoner(String summonerName){	

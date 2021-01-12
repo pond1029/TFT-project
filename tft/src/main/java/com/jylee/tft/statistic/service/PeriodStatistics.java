@@ -11,7 +11,6 @@ package com.jylee.tft.statistic.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jylee.tft.statistic.domain.Account;
@@ -20,6 +19,8 @@ import com.jylee.tft.statistic.domain.Figure;
 import com.jylee.tft.statistic.domain.Period;
 import com.jylee.tft.statistic.domain.PeriodFigure;
 import com.jylee.tft.statistic.domain.PlayTime;
+
+import lombok.RequiredArgsConstructor;
 
 /**
   * @Package : com.jylee.tft.statistic
@@ -31,13 +32,11 @@ import com.jylee.tft.statistic.domain.PlayTime;
   */
 
 @Service
+@RequiredArgsConstructor
 public class PeriodStatistics implements Statistics{
 	
-	@Autowired
-	LOLAccountManager lol;
-	
-	@Autowired
-	TFTAccountManager tft;
+	private final LOLAccountManager lol;	
+	private final TFTAccountManager tft;
 	
 	@Override
 	public Figure getStatistics(List<Account> accounts, Period period) {	

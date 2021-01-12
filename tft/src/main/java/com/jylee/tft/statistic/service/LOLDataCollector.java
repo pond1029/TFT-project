@@ -16,7 +16,6 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +35,8 @@ import com.jylee.tft.statistic.repository.LOLParticipantRepository;
 import com.jylee.tft.statistic.repository.SummonerRepository;
 import com.jylee.tft.util.PondUtils;
 
+import lombok.RequiredArgsConstructor;
+
 /**
   * @Package : com.jylee.tft.statistic.service
   * @FileName : LOLDataCollector.java
@@ -46,19 +47,16 @@ import com.jylee.tft.util.PondUtils;
   */
 
 @Service
+@RequiredArgsConstructor
 public class LOLDataCollector{
 	
-	private final int RETRIEVE_COUNT = 10;
-	private final int RETRIEVE_MAX = 50;
-	@Autowired
-	private SummonerRepository summonerRepository;	
-	@Autowired
-	private LOLMatchRepository matchRepository;	
-	@Autowired
-	private LOLParticipantRepository participantRepository;	
-	@Autowired
-	private LOLAPIInformation api;		
-	private final ObjectMapper mapper = new ObjectMapper();
+	private int RETRIEVE_COUNT = 10;
+	private int RETRIEVE_MAX = 50;
+	private final SummonerRepository summonerRepository;	
+	private final LOLMatchRepository matchRepository;	
+	private final LOLParticipantRepository participantRepository;	
+	private final LOLAPIInformation api;		
+	private ObjectMapper mapper = new ObjectMapper();
 	
 	@Transactional
 	public Summoner getSummoner(String summonerName){	

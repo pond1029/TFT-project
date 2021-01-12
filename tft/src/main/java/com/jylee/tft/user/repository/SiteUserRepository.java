@@ -9,8 +9,10 @@
 
 package com.jylee.tft.user.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.jylee.tft.user.domain.SiteUser;
 
 /**
@@ -24,4 +26,11 @@ import com.jylee.tft.user.domain.SiteUser;
 
 public interface SiteUserRepository extends JpaRepository<SiteUser, Long>{
 
+	SiteUser save(SiteUser siteUser);
+	
+	boolean existsByEmail(String eamil);
+	
+	boolean existsByNickname(String nickname);
+	
+	Optional<SiteUser> findByEmail(String email);
 }

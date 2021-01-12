@@ -9,16 +9,21 @@
 
 package com.jylee.tft.user;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.jylee.tft.user.domain.JoinForm;
+import com.jylee.tft.user.domain.SiteUser;
+import com.jylee.tft.user.repository.SiteUserRepository;
+import com.jylee.tft.user.service.JoinFormValidator;
+import com.jylee.tft.user.service.SiteUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,13 +40,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SiteUserController {
 
+	private final SiteUserService userService;	
 	private final JoinFormValidator joinFormValidator;
+	private final SiteUserRepository userRepository;
 	
-	@InitBinder("joinForm")
-	public void InitBinder(WebDataBinder webDataBinder) {
-		webDataBinder.addValidators(joinFormValidator);
-	}
-
 	@GetMapping("/join")
 	public String join(Model model) {
 		model.addAttribute("joinForm",new JoinForm());
@@ -50,11 +52,34 @@ public class SiteUserController {
 	
 	@PostMapping("/join")
 	public String joinSubmit(@ModelAttribute JoinForm joinForm, Errors errors) {
-		System.out.println("post");
+		joinFormValidator.validate(joinForm, errors);
 		if(errors.hasErrors()) {
 			return "user/join";
+		}		
+		SiteUser joinUser = userService.processJoin(joinForm);
+		userService.login(joinUser);
+		return "redirect:/";
+	}
+	
+	@GetMapping("/check-email-token")
+	public String checkEmailToken(String token, String email, Model model) {
+		Optional<SiteUser> user = userRepository.findByEmail(email);
+		String view = "user/checked-email";
+		if(user.isEmpty()) {
+			model.addAttribute("error","wrong.email");
+			return view;
 		}
-		return "redirct:/";
+		SiteUser checkedUser = user.get();
+		if(!checkedUser.isValidToken(token)) {
+			model.addAttribute("error","wrong.token");
+			return view;
+		}
+		checkedUser.confirmUser();
+		userService.login(checkedUser);
+		model.addAttribute("numberOfUser",userRepository.count());
+		model.addAttribute("nickname",checkedUser.getNickname());
+		return view;
+		
 	}
 	
 }

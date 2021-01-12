@@ -9,13 +9,10 @@
 
 package com.jylee.tft.statistic.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,13 +23,9 @@ import com.jylee.tft.statistic.domain.Period;
 import com.jylee.tft.statistic.domain.PlayTime;
 import com.jylee.tft.statistic.domain.Summoner;
 import com.jylee.tft.statistic.repository.LOLMatchRepository;
-import com.jylee.tft.statistic.repository.LOLParticipantRepository;
 import com.jylee.tft.statistic.repository.SummonerRepository;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 /**
   * @Package : com.jylee.tft.statistic.domain
@@ -43,15 +36,13 @@ import lombok.Setter;
   * @Information :
   */
 @Service
+@RequiredArgsConstructor
 public class LOLAccountManager implements DataManager{
 
-	@Autowired
-	private SummonerRepository summoner;	
-	@Autowired
-	private LOLDataCollector lolCollector;
-	@Autowired
-	private LOLMatchRepository lolMatch;
-	private final AccountType type = AccountType.LOL;
+	private final SummonerRepository summoner;	
+	private final LOLDataCollector lolCollector;
+	private final LOLMatchRepository lolMatch;
+	private AccountType type = AccountType.LOL;
 	 
 	@Override
 	public List<PlayTime> getPlayTimes(String summonerName, Period period) {

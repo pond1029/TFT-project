@@ -7,7 +7,10 @@
   * @Information :
   */
 
-package com.jylee.tft.user;
+package com.jylee.tft.user.service;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -41,29 +44,26 @@ public class JoinFormValidator implements Validator{
 	@Override
 	public void validate(Object target, Errors errors) {
 		JoinForm joinForm = (JoinForm) target;
-		String nickname = joinForm.getNickname();
-		errors.rejectValue("nickname", "invalid.nickname", new Object[]{nickname},"Nickname must be between 1 and 20 characters.");	
-		if(nickname == null || nickname.length() <= 0 || nickname.length() >= 20) {
-			errors.rejectValue("nickname", "invalid.nickname", new Object[]{nickname},"Nickname must be between 1 and 20 characters.");	
+		if(siteUserRepository.existsByEmail(joinForm.getEmail())) {
+			errors.rejectValue("email", "invalid.emial", new Object[] {joinForm.getEmail()},"email is alreay exists");
+		}
+
+		if(siteUserRepository.existsByNickname(joinForm.getNickname())) {
+			errors.rejectValue("nickname", "invalid.nickname", new Object[] {joinForm.getNickname()},"nickname is alreay exists");
 		}
 		
+		if(joinForm.getNickname() == null || joinForm.getNickname().length() <= 0 || joinForm.getNickname().length() >= 20) {
+			errors.rejectValue("nickname", "invalid.nickname", new Object[]{joinForm.getNickname()},"Nickname must be between 1 and 20 characters.");	
+		}		
 		
-		
+		String regex = "^(.+)@(.+)$"; 
+		Pattern p = Pattern.compile(regex); 
+		Matcher m = p.matcher(joinForm.getEmail()); 
+		if(!m.matches()){
+			errors.rejectValue("email", "invalid.email", new Object[]{joinForm.getEmail()},"Wrong email.");
+		}
+
 	}
 
 
-//	public JoinForm(String nickname, String email, String password) throws BindException {
-//		if(nickname == null || nickname.length() <= 0 || nickname.length() >= 20) {
-//			throw new BindException();			
-//		}
-//		if(email == null) {
-//			throw new BindException();			
-//		}
-//		if(password == null || password.length() <= 0 || password.length() >= 20) {
-//			throw new BindException();			
-//		}
-//		this.nickname = nickname;
-//		this.email = email;
-//		this.password = password;
-//	}
 }

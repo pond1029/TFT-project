@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.jylee.tft.statistic.domain.Period;
-import com.jylee.tft.statistic.service.DataManager;
 import com.jylee.tft.statistic.service.LOLAccountManager;
 import com.jylee.tft.statistic.service.TFTAccountManager;
 

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -28,6 +27,8 @@ import com.jylee.tft.statistic.repository.SummonerRepository;
 import com.jylee.tft.statistic.repository.TFTMatchRepository;
 import com.jylee.tft.statistic.repository.TFTParticipantRepository;
 
+import lombok.RequiredArgsConstructor;
+
 /**
   * @Package : com.jylee.tft.statistic.domain
   * @FileName : LOLAccount.java
@@ -37,17 +38,14 @@ import com.jylee.tft.statistic.repository.TFTParticipantRepository;
   * @Information :
   */
 @Service
+@RequiredArgsConstructor
 public class TFTAccountManager implements DataManager{
 
-	@Autowired
-	private SummonerRepository summoner;	
-	@Autowired
-	private TFTDataCollector tftCollector;
-	@Autowired
-	private TFTMatchRepository tftMatch;
-	@Autowired
-	private TFTParticipantRepository tftParticipant;
-	private final AccountType type = AccountType.TFT;
+	private final  SummonerRepository summoner;	
+	private final  TFTDataCollector tftCollector;
+	private final  TFTMatchRepository tftMatch;
+	private final  TFTParticipantRepository tftParticipant;
+	private AccountType type = AccountType.TFT;
 
 	@Override
 	public List<PlayTime> getPlayTimes(String summonerName, Period period) {
