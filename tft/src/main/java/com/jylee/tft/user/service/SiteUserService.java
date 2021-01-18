@@ -38,7 +38,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SiteUserService {
 
-	
 	private final SiteUserRepository siteUserRepository;
 	private final ConsoleMailSender mailSender;
 	private final PasswordEncoder passwordEncoder;
