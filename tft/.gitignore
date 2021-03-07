@@ -8,6 +8,7 @@ target/
 application-dev.yml
 application-production.yml
 src/main/resources/static/node_modules
+src/main/resources/static/node
 
 ### STS ###
 .apt_generated

@@ -43,7 +43,7 @@ public class StatisticsTest {
 	@DisplayName("통계 테스트")
 	public void manyStatistics() {
 		List<Account> accounts = List.of(new Account(AccountType.LOL, "야방금무빙봤냐"), new Account(AccountType.TFT, "야방금무빙봤냐"));
-		Figure figure = statistics.getStatistics(accounts, new Period(2020,12));
+		Figure figure = statistics.getStatistics(accounts, new Period(2021,02));
 		assertThat(figure.getTotalData()).isGreaterThan(0L);
 	}
 }
