@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
   */
 @Service
 @RequiredArgsConstructor
-public class LOLAccountManager implements DataManager{
+public class LOLDataManager implements DataManager{
 
 	private final SummonerRepository summoner;	
 	private final LOLDataCollector lolCollector;

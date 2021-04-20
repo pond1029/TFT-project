@@ -25,9 +25,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
+public class SearchForm {
 
 	private AccountType type;
-	private String id;
-	
+	private String accountId;
+	private Period period;
 }

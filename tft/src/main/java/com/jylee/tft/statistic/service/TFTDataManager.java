@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
   */
 @Service
 @RequiredArgsConstructor
-public class TFTAccountManager implements DataManager{
+public class TFTDataManager implements DataManager{
 
 	private final  SummonerRepository summoner;	
 	private final  TFTDataCollector tftCollector;

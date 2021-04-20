@@ -20,6 +20,17 @@ package com.jylee.tft.statistic.domain;
 
 public enum AccountType {
 
-	LOL, TFT;
+	LOL("League of Legends"), 
+	TFT("Teamfight Tactics");
+	
+	private final String fullName;
+	
+	private AccountType(String fullName){
+		this.fullName= fullName;
+	}
+	
+	public String getFullName(){
+		return this.fullName;
+	}
 	
 }

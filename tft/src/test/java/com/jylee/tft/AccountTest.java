@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.jylee.tft.statistic.domain.Period;
-import com.jylee.tft.statistic.service.LOLAccountManager;
-import com.jylee.tft.statistic.service.TFTAccountManager;
+import com.jylee.tft.statistic.service.LOLDataManager;
+import com.jylee.tft.statistic.service.TFTDataManager;
 
 /**
   * @Package : com.jylee.tft
@@ -33,10 +33,10 @@ import com.jylee.tft.statistic.service.TFTAccountManager;
 public class AccountTest {
 	
 	@Autowired
-	TFTAccountManager tftAccount;
+	TFTDataManager tftAccount;
 
 	@Autowired
-	LOLAccountManager lolAccount;
+	LOLDataManager lolAccount;
 	
 	@Test
 	@DisplayName("LOL 계정 정보 조회")

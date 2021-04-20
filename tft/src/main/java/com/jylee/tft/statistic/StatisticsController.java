@@ -12,8 +12,13 @@ package com.jylee.tft.statistic;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.jylee.tft.statistic.service.PeriodStatistics;
+import com.jylee.tft.statistic.domain.AccountType;
+import com.jylee.tft.statistic.domain.Figure;
+import com.jylee.tft.statistic.domain.Period;
+import com.jylee.tft.statistic.domain.PeriodFigure;
+import com.jylee.tft.statistic.domain.SearchForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,12 +34,19 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class StatisticsController {
-	
-	private final PeriodStatistics period;
-	
+		
 	@GetMapping("/statistics")
 	public String statistics(Model model) {
+		
+		model.addAttribute("accountTypes", AccountType.values());
 		return "statistic/statistics";
 	}
+	
+	@GetMapping("/statistics/figure")
+	public Figure searchStatistics(String accounId, String accountType, String stDate, String endDate) {
+		Figure figure = new PeriodFigure();
+		return figure;
+	}
+	
 	
 }

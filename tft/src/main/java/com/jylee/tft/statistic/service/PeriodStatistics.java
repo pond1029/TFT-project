@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.jylee.tft.statistic.domain.Account;
+import com.jylee.tft.statistic.domain.SearchForm;
 import com.jylee.tft.statistic.domain.AccountType;
 import com.jylee.tft.statistic.domain.Figure;
 import com.jylee.tft.statistic.domain.Period;
@@ -35,23 +35,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PeriodStatistics implements Statistics{
 	
-	private final LOLAccountManager lol;	
-	private final TFTAccountManager tft;
+	private final LOLDataManager lol;	
+	private final TFTDataManager tft;
 	
 	@Override
-	public Figure getStatistics(List<Account> accounts, Period period) {	
+	public Figure getStatistics(List<SearchForm> searchForms, Period period) {	
 		PeriodFigure figure = new PeriodFigure();
 		
-		for(Account account : accounts) {
+		for(SearchForm searchForm : searchForms) {
 			
-			if(account.getType().equals(AccountType.LOL)) {
-				List<PlayTime> playTimes = lol.getPlayTimes(account.getId(), period);
+			if(searchForm.getType().equals(AccountType.LOL)) {
+				List<PlayTime> playTimes = lol.getPlayTimes(searchForm.getAccountId(), period);
 				for(PlayTime play : playTimes) {
 					figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
 				}				
 			}
-			if(account.getType().equals(AccountType.TFT)) {
-				List<PlayTime> playTimes = tft.getPlayTimes(account.getId(), period);
+			if(searchForm.getType().equals(AccountType.TFT)) {
+				List<PlayTime> playTimes = tft.getPlayTimes(searchForm.getAccountId(), period);
 				for(PlayTime play : playTimes) {
 					figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
 				}				
