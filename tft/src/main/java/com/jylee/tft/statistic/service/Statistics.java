@@ -35,5 +35,5 @@ public interface Statistics {
 	  * @param userId
 	  * @return
 	 */
-	public abstract Figure getStatistics(List<SearchForm> searchForms, Period period);
+	public abstract Figure getFigure(SearchForm searchForm);
 }

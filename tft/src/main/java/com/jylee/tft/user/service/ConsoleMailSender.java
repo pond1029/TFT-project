@@ -41,45 +41,33 @@ public class ConsoleMailSender implements JavaMailSender{
 	}
 
 	@Override
-	public void send(SimpleMailMessage... simpleMessages) throws MailException {
-		// TODO Auto-generated method stub
-		
+	public void send(SimpleMailMessage... simpleMessages) throws MailException {		
 	}
 
 	@Override
 	public MimeMessage createMimeMessage() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public MimeMessage createMimeMessage(InputStream contentStream) throws MailException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void send(MimeMessage mimeMessage) throws MailException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void send(MimeMessage... mimeMessages) throws MailException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void send(MimeMessagePreparator mimeMessagePreparator) throws MailException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void send(MimeMessagePreparator... mimeMessagePreparators) throws MailException {
-		// TODO Auto-generated method stub
-		
 	}
 	
 

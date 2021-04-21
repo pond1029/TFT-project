@@ -20,8 +20,8 @@ package com.jylee.tft.statistic.domain;
 
 public interface Figure {
 	
-	public abstract String[] gatLabel();
-	public abstract long[] getData();
-	public abstract long getTotalData();
+	public abstract String[] getLabels();
+	public abstract Long[] getDatas();
+	public abstract Long getTotalData();
 	
 }

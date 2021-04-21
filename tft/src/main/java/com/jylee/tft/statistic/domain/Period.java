@@ -42,6 +42,11 @@ public class Period {
 		}
 		return dayLists;
 	}
+
+	public Period() {
+		this.from = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(),1,0,0);
+		this.to = from.plusMonths(1);
+	}
 	
 	public Period(LocalDateTime from, LocalDateTime to) {
 		this.from = from;

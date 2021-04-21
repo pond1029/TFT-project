@@ -39,26 +39,25 @@ public class PeriodStatistics implements Statistics{
 	private final TFTDataManager tft;
 	
 	@Override
-	public Figure getStatistics(List<SearchForm> searchForms, Period period) {	
-		PeriodFigure figure = new PeriodFigure();
+	public Figure getFigure(SearchForm searchForm) {	
+		PeriodFigure figure = new PeriodFigure(searchForm.getPeriod());
 		
-		for(SearchForm searchForm : searchForms) {
-			
-			if(searchForm.getType().equals(AccountType.LOL)) {
-				List<PlayTime> playTimes = lol.getPlayTimes(searchForm.getAccountId(), period);
-				for(PlayTime play : playTimes) {
-					figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
-				}				
-			}
-			if(searchForm.getType().equals(AccountType.TFT)) {
-				List<PlayTime> playTimes = tft.getPlayTimes(searchForm.getAccountId(), period);
-				for(PlayTime play : playTimes) {
-					figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
-				}				
-				
-			}
+		//TODO if문 제거 필요
+		if(searchForm.getType().equals(AccountType.LOL)) {
+			List<PlayTime> playTimes = lol.getPlayTimes(searchForm.getAccountId(), searchForm.getPeriod());
+			for(PlayTime play : playTimes) {
+				figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
+			}				
 		}
-				
+		
+		if(searchForm.getType().equals(AccountType.TFT)) {
+			List<PlayTime> playTimes = tft.getPlayTimes(searchForm.getAccountId(), searchForm.getPeriod());
+			for(PlayTime play : playTimes) {
+				figure.setFigure(play.getPlayedDate(), play.getPlayTime().toSecondOfDay());
+			}				
+			
+		}
+						
 		return figure;
 	}
 	

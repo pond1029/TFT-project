@@ -35,6 +35,10 @@ public class PeriodFigure implements Figure{
 	public void setFigure(LocalDate label, long data) {		
 		this.figures.put(label.toString(), figures.getOrDefault(label.toString(), 0L) + data);
 	}
+
+	public void setFigure(String label, long data) {		
+		this.figures.put(label, figures.getOrDefault(label.toString(), 0L) + data);
+	}
 	
 	public PeriodFigure(Period period) {
 		//날짜 세팅
@@ -46,14 +50,14 @@ public class PeriodFigure implements Figure{
 	}
 
 	@Override
-	public String[] gatLabel() {
+	public String[] getLabels() {
 		return figures.keySet().stream().sorted().toArray(String[]::new);
 	}
 	
 	@Override
-	public long[] getData() {
-		String[] keyArray = this.gatLabel();
-		long[] dataArray = new long[keyArray.length];
+	public Long[] getDatas() {
+		String[] keyArray = this.getLabels();
+		Long[] dataArray = new Long[keyArray.length];
 		
 		for (int i = 0; i < dataArray.length; i++) {
 			dataArray[i] = figures.get(keyArray[i]);
@@ -63,9 +67,9 @@ public class PeriodFigure implements Figure{
 	}
 
 	@Override
-	public long getTotalData() {
-		long[] datas = this.getData();
-		return Arrays.stream(datas).sum();
+	public Long getTotalData() {
+		Long[] datas = this.getDatas();
+		return Arrays.stream(datas).reduce(0L, Long::sum);
 	}
 	
 }
