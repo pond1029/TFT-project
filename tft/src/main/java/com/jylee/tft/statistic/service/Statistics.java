@@ -11,8 +11,9 @@ package com.jylee.tft.statistic.service;
 
 import java.util.List;
 
-import com.jylee.tft.statistic.domain.SearchForm;
+import com.jylee.tft.statistic.domain.Account;
 import com.jylee.tft.statistic.domain.Figure;
+import com.jylee.tft.statistic.domain.StatisticCondition;
 import com.jylee.tft.statistic.domain.Period;
 
 /**
@@ -25,15 +26,6 @@ import com.jylee.tft.statistic.domain.Period;
   */
 
 public interface Statistics {
-	/**
-	 * 
-	  * @Method Name : getStatistics
-	  * @Date : 2021. 1. 4.
-	  * @Author : "LeeJaeYeon"
-	  * @Version : 
-	  * @Information : 데이터 통계
-	  * @param userId
-	  * @return
-	 */
-	public abstract Figure getFigure(SearchForm searchForm);
+	
+	public abstract Figure getFigure(Account account, StatisticCondition condition);
 }

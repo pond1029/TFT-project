@@ -9,10 +9,7 @@
 
 package com.jylee.tft.statistic.service;
 
-import java.util.List;
-
-import com.jylee.tft.statistic.domain.Period;
-import com.jylee.tft.statistic.domain.PlayTime;
+import com.jylee.tft.statistic.domain.Account;
 
 /**
   * @Package : com.jylee.tft.statistic.domain
@@ -20,9 +17,12 @@ import com.jylee.tft.statistic.domain.PlayTime;
   * @Date : 2021. 1. 8. 
   * @Author : "LeeJaeYeon"
   * @Version :
-  * @Information : 조회할 계정에 대한 정보
+  * @Information : 데이터  관리
   */
 
 public interface DataManager {
-	public abstract List<PlayTime> getPlayTimes(String accountId, Period period);
+	
+	public abstract void initAccount(Account account);
+	
+	public abstract void update(Account account);
 }

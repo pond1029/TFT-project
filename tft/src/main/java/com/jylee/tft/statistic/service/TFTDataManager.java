@@ -17,9 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.jylee.tft.statistic.domain.Account;
 import com.jylee.tft.statistic.domain.AccountType;
 import com.jylee.tft.statistic.domain.Period;
 import com.jylee.tft.statistic.domain.PlayTime;
+import com.jylee.tft.statistic.domain.RiotAccount;
 import com.jylee.tft.statistic.domain.Summoner;
 import com.jylee.tft.statistic.domain.TFTMatch;
 import com.jylee.tft.statistic.domain.TFTParticipant;
@@ -39,41 +41,24 @@ import lombok.RequiredArgsConstructor;
   */
 @Service
 @RequiredArgsConstructor
-public class TFTDataManager implements DataManager{
+public class TFTDataManager extends RiotDataManager{
 
-	private final  SummonerRepository summoner;	
+	private final RiotDataManager riotDataManager;
+	private final  SummonerImpl summonerRepository;	
 	private final  TFTDataCollector tftCollector;
 	private final  TFTMatchRepository tftMatch;
 	private final  TFTParticipantRepository tftParticipant;
-	private AccountType type = AccountType.TFT;
 
 	@Override
-	public List<PlayTime> getPlayTimes(String summonerName, Period period) {
-		List<PlayTime> playTimes = new ArrayList<>();			
-		Summoner summoner = this.getSummoner(summonerName);
+	public void update(Account account) {			
+		Summoner summoner = summonerRepository.getSummoner((RiotAccount) account);
 		
-		Page<TFTMatch> recent = tftMatch.findRecent(summoner.getPuuid(), PageRequest.of(0,1));
-		
-		if(recent.isEmpty() || recent.get().findFirst().get().getGameDatetime().isBefore(period.getTo())) {
-			tftCollector.update(summoner.getPuuid());			
+		if(summoner == null) {
+			riotDataManager.initAccount(account);
+			summoner = summonerRepository.getSummoner((RiotAccount) account);
 		}
 		
-		Optional<List<TFTParticipant>> participants = 
-				tftParticipant.findByPuuidAndBetweenGameDatetime(summoner.getPuuid(), period.getFrom(), period.getTo());
-
-		if(participants.isEmpty()) return playTimes;
-		
-		for(TFTParticipant participant : participants.get()) {		
-			playTimes.add(new PlayTime(participant.getMatch().getGameDatetime().toLocalDate(), participant.getTimeEliminated()));
-		}
-		
-		return playTimes;
-	}
-
-	private Summoner getSummoner(String summonerName) {
-		Optional<Summoner> user = summoner.findByNameAndType(summonerName,type);	
-		Summoner summoner = user.orElseGet(()->tftCollector.getSummoner(summonerName));
-		return summoner;
+		//TODO TFT 업데이트 구현
 	}
 		
 }

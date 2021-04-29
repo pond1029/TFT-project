@@ -28,7 +28,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @EqualsAndHashCode
-public class Period {
+public class Period implements StatisticCondition{
 
 	private LocalDateTime from;
 	private LocalDateTime to;

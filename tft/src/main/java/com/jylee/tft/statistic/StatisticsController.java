@@ -14,11 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.jylee.tft.statistic.domain.Account;
 import com.jylee.tft.statistic.domain.AccountType;
 import com.jylee.tft.statistic.domain.Figure;
 import com.jylee.tft.statistic.domain.Period;
 import com.jylee.tft.statistic.domain.PeriodFigure;
-import com.jylee.tft.statistic.domain.SearchForm;
+import com.jylee.tft.statistic.service.AccountFactory;
 import com.jylee.tft.statistic.service.PeriodStatistics;
 
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class StatisticsController {
 	public String searchStatistics(String accountId, String accountType, Integer month, Model model) {
 		
 		Period period = new Period();
-		Figure figure = periodStatisticsService.getFigure(new SearchForm(AccountType.valueOf(accountType), accountId, period));
+		Figure figure = periodStatisticsService.getFigure(AccountFactory.getAccount(accountId, accountType), period);
 		
 		model.addAttribute("figure", figure);
 		model.addAttribute("accountId", accountId);

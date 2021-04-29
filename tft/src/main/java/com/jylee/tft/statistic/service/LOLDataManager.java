@@ -17,10 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.jylee.tft.statistic.domain.Account;
 import com.jylee.tft.statistic.domain.AccountType;
 import com.jylee.tft.statistic.domain.LOLMatch;
 import com.jylee.tft.statistic.domain.Period;
 import com.jylee.tft.statistic.domain.PlayTime;
+import com.jylee.tft.statistic.domain.RiotAccount;
 import com.jylee.tft.statistic.domain.Summoner;
 import com.jylee.tft.statistic.repository.LOLMatchRepository;
 import com.jylee.tft.statistic.repository.SummonerRepository;
@@ -37,42 +39,25 @@ import lombok.RequiredArgsConstructor;
   */
 @Service
 @RequiredArgsConstructor
-public class LOLDataManager implements DataManager{
+public class LOLDataManager extends RiotDataManager{
 
-	private final SummonerRepository summoner;	
+	private final RiotDataManager riotDataManager;
+	private final SummonerImpl summonerRepository;	
 	private final LOLDataCollector lolCollector;
 	private final LOLMatchRepository lolMatch;
-	private AccountType type = AccountType.LOL;
-	 
+
+
 	@Override
-	public List<PlayTime> getPlayTimes(String summonerName, Period period) {
-		List<PlayTime> playTimes = new ArrayList<>();		
-		Summoner summoner = this.getSummoner(summonerName);
+	public void update(Account account) {
 
-		Page<LOLMatch> recent = lolMatch.findRecent(summoner.getAccountId(), PageRequest.of(0,1));
+		Summoner summoner = summonerRepository.getSummoner((RiotAccount) account);
 		
-		if(recent.isEmpty() || recent.get().findFirst().get().getGameCreation().isBefore(period.getTo())) {		
-			lolCollector.update(summoner.getAccountId());
+		if(summoner == null) {
+			riotDataManager.initAccount(account);
+			summoner = summonerRepository.getSummoner((RiotAccount) account);
 		}
 		
-		Optional<List<LOLMatch>> matches = 
-				lolMatch.findByAccountIdAndBetweenGameCreation(summoner.getAccountId(), period.getFrom(), period.getTo());
-
-		if(matches.isEmpty()) return playTimes;
-		
-		//TODO n+1 select가 일어나는지 확인
-		for(LOLMatch detail : matches.get()) {		
-			playTimes.add(new PlayTime(detail.getGameCreation().toLocalDate(), detail.getGameDuration()));
-		}
-		
-		return playTimes;
+		//TODO LOL 업데이트 구현
 	}
 	
-	private Summoner getSummoner(String summonerName) {
-		Optional<Summoner> user = summoner.findByNameAndType(summonerName,type);	
-		Summoner summoner = user.orElseGet(()->lolCollector.getSummoner(summonerName));
-		return summoner;
-	}
-
-		
 }

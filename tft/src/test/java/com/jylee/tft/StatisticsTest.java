@@ -9,19 +9,17 @@
 
 package com.jylee.tft;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.jylee.tft.statistic.domain.SearchForm;
-import com.jylee.tft.statistic.domain.AccountType;
-import com.jylee.tft.statistic.domain.Figure;
+import com.jylee.tft.statistic.domain.Account;
 import com.jylee.tft.statistic.domain.Period;
+import com.jylee.tft.statistic.service.AccountFactory;
+import com.jylee.tft.statistic.service.AccountVisitor;
+import com.jylee.tft.statistic.service.AccountVisitorImpl;
 import com.jylee.tft.statistic.service.PeriodStatistics;
 
 /**
@@ -35,13 +33,23 @@ import com.jylee.tft.statistic.service.PeriodStatistics;
 
 @SpringBootTest
 public class StatisticsTest {
-
-	@Autowired
-	PeriodStatistics statistics;
 	
+	@Autowired
+	AccountVisitorImpl accountVisitor = new AccountVisitorImpl();
+	
+	@Disabled
 	@Test
-	@DisplayName("통계 테스트")
-	public void manyStatistics() {
-		
+	@DisplayName("TFT 조회")
+	public void tftPlaytimeSearch() {
+		Account account = AccountFactory.getAccount("야 방금 무빙봤냐", "TFT");
+		account.getPlayTimes(accountVisitor, new Period(2021,02));		
 	}
+
+	@Test
+	@DisplayName("LOL 조회")
+	public void lolPlaytimeSearch() {
+		Account account = AccountFactory.getAccount("야 방금 무빙봤냐", "LOL");
+		account.getPlayTimes(accountVisitor, new Period(2020,12));		
+	}
+	
 }
