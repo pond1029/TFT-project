@@ -42,8 +42,6 @@ public class StatisticsTest {
 	@Test
 	@DisplayName("통계 테스트")
 	public void manyStatistics() {
-		List<SearchForm> searchForms = List.of(new SearchForm(AccountType.LOL, "야방금무빙봤냐"), new SearchForm(AccountType.TFT, "야방금무빙봤냐"));
-		Figure figure = statistics.getStatistics(searchForms, new Period(2021,02));
-		assertThat(figure.getTotalData()).isGreaterThan(0L);
+		
 	}
 }
