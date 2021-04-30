@@ -24,19 +24,19 @@ import com.jylee.tft.statistic.service.AccountVisitor;
 
 public abstract class Account {
 
-	private String accountId;
+	private String accountName;
 	private AccountType accountType;
 	
-	public Account(String accountId, AccountType accountType) {
+	public Account(String accountName, AccountType accountType) {
 		super();
-		this.accountId = accountId;
+		this.accountName = accountName;
 		this.accountType = accountType;
 	}
 
 	public abstract List<PlayTime> getPlayTimes(AccountVisitor visitor, Period period);
 
-	public String getAccountId() {
-		return this.accountId;
+	public String getAccountName() {
+		return this.accountName;
 	}
 
 	public AccountType getAccountType() {

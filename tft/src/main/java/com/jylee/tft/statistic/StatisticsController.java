@@ -46,13 +46,13 @@ public class StatisticsController {
 	}
 	
 	@GetMapping("/statistics/figure")
-	public String searchStatistics(String accountId, String accountType, Integer month, Model model) {
+	public String searchStatistics(String accountName, String accountType, Integer month, Model model) {
 		
 		Period period = new Period();
-		Figure figure = periodStatisticsService.getFigure(AccountFactory.getAccount(accountId, accountType), period);
+		Figure figure = periodStatisticsService.getFigure(AccountFactory.getAccount(accountName, accountType), period);
 		
 		model.addAttribute("figure", figure);
-		model.addAttribute("accountId", accountId);
+		model.addAttribute("accountName", accountName);
 		model.addAttribute("accountType", AccountType.valueOf(accountType).getFullName());
 		model.addAttribute("month", month);
 		

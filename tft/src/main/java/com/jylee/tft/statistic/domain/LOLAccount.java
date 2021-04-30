@@ -25,8 +25,8 @@ import com.jylee.tft.statistic.service.AccountVisitor;
 public class LOLAccount extends RiotAccount{
 
 
-	public LOLAccount(String accountId, AccountType accountType) {
-		super(accountId, accountType);
+	public LOLAccount(String accountName, AccountType accountType) {
+		super(accountName, accountType);
 	}
 
 	@Override

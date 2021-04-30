@@ -25,8 +25,8 @@ import com.jylee.tft.statistic.service.AccountVisitor;
 public class TFTAccount extends RiotAccount{
 	
 
-	public TFTAccount(String accountId, AccountType accountType) {
-		super(accountId, accountType);
+	public TFTAccount(String accountName, AccountType accountType) {
+		super(accountName, accountType);
 	}
 
 	@Override

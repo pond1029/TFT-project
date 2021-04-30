@@ -14,10 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -30,9 +26,6 @@ import com.jylee.tft.statistic.domain.LOLAPIInformation;
 import com.jylee.tft.statistic.domain.LOLMatch;
 import com.jylee.tft.statistic.domain.LOLParticipant;
 import com.jylee.tft.statistic.domain.Summoner;
-import com.jylee.tft.statistic.repository.LOLMatchRepository;
-import com.jylee.tft.statistic.repository.LOLParticipantRepository;
-import com.jylee.tft.statistic.repository.SummonerRepository;
 import com.jylee.tft.util.PondUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -50,170 +43,96 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LOLDataCollector{
 	
-	private int RETRIEVE_COUNT = 10;
-	private int RETRIEVE_MAX = 50;
-	private final SummonerRepository summonerRepository;	
-	private final LOLMatchRepository matchRepository;	
-	private final LOLParticipantRepository participantRepository;	
+	private static final int RETRIEVE_COUNT = 10;
+	private static final int RETRIEVE_MAX = 50;
 	private final LOLAPIInformation api;		
-	private ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = new ObjectMapper();
 	
-	@Transactional
-	public Summoner getSummoner(String summonerName){	
+	
+	public Summoner retrieveSummoner(String summonerName) throws JsonProcessingException{	
 		String response = this.send(api.getSummonerUrl(summonerName), null);
-		Map<String, Object> responseMap;
-		try {
-			responseMap = mapper.readValue(response, Map.class);
-			Summoner summoner = Summoner.builder()
-					.id(PondUtils.getString(responseMap, "id"))		
-					.accountId(PondUtils.getString(responseMap,"accountId"))
-					.puuid(PondUtils.getString(responseMap,"puuid"))
-					.name(PondUtils.getString(responseMap,"name"))
-					.profileIconId(PondUtils.getLong(responseMap,"profileIconId"))
-					.revisionDate(PondUtils.longToDateTime(PondUtils.getLong(responseMap,"revisionDate")))
-					.summonerLevel(PondUtils.getLong(responseMap,"summonerLevel"))
-					.type(AccountType.LOL)
-					.build();
-			Summoner savedSummoner = summonerRepository.save(summoner);			
-			return savedSummoner;
-		} catch (JsonProcessingException e) {
-			
-		}		
-		return null;
+		
+		Map<String, Object> responseMap =  mapper.readValue(response, Map.class);
+		
+		Summoner summoner = Summoner.builder()
+				.id(PondUtils.getString(responseMap, "id"))		
+				.accountId(PondUtils.getString(responseMap,"accountId"))
+				.puuid(PondUtils.getString(responseMap,"puuid"))
+				.name(PondUtils.getString(responseMap,"name"))
+				.profileIconId(PondUtils.getLong(responseMap,"profileIconId"))
+				.revisionDate(PondUtils.longToDateTime(PondUtils.getLong(responseMap,"revisionDate")))
+				.summonerLevel(PondUtils.getLong(responseMap,"summonerLevel"))
+				.type(AccountType.LOL)
+				.build();	
+		
+		return summoner;
 	}
-	
-	@Transactional
-	public List<LOLMatch> update(String apiId) {
-		try {
-			List<LOLMatch> matches = getMatches(apiId);		
-			for (LOLMatch lolMatch : matches) {
-				fillDetail(lolMatch);
-			}		
-			return matchRepository.saveAll(matches);
-		} catch (JsonProcessingException e) {
-		}		
-		return null;
-	}
+		
+	public List<LOLMatch> retrieveMatches(String accountId) throws JsonMappingException, JsonProcessingException {
+		List<LOLMatch> matchList = new ArrayList<LOLMatch>();
 
-	private List<LOLMatch> getMatches(String apiId) throws JsonMappingException, JsonProcessingException {
-		List<LOLMatch> matches = new ArrayList<LOLMatch>();
-		List<Map<String, Object>> inputMatches = inputMatches(apiId);
-		for (Map<String, Object> inputMatch : inputMatches) {
-			Long gameId = PondUtils.getLong(inputMatch,"gameId");				
+		Map<String, Object> parameter = new HashMap<String, Object>();		
+		parameter.put("beginIndex", 0);
+		parameter.put("endIndex", RETRIEVE_COUNT);
+		
+		String response = this.send(api.getMatchListsUrl(accountId), parameter);	
+		
+		Map<String, Object> responseMap = mapper.readValue(response, Map.class);
+		List<Map<String, Object>> responseMatches = (List<Map<String, Object>>) responseMap.get("matches");
 
-			LOLParticipant participant = new LOLParticipant();
-			participant.setRole(PondUtils.getString(inputMatch,"role"));
-			participant.setLane(PondUtils.getString(inputMatch,"lane"));		
-			participant.setAccountId(apiId);
+		for (Map<String, Object> map : responseMatches) {
+			LOLMatch match = new LOLMatch();
+			match.setGameId(PondUtils.getLong(map,"gameId"));			
+			match.setSeason(PondUtils.getLong(map,"season"));
 			
-			LOLMatch lolMatch = new LOLMatch();
-			lolMatch.setPlatformId(PondUtils.getString(inputMatch,"platformId"));
-			lolMatch.setGameId(gameId);
-			lolMatch.setQueue(PondUtils.getLong(inputMatch,"queue"));
-			lolMatch.setSeason(PondUtils.getLong(inputMatch,"season"));
-			lolMatch.addParticipants(participant);
-			
-			matches.add(lolMatch);
+			matchList.add(match);
 		}
 		
-		return matches;
+		return matchList;
 	}
 	
-	private List<Map<String, Object>> inputMatches(String apiId) throws JsonMappingException, JsonProcessingException {
-		int beginIndex = 0;
-		int endIndex = RETRIEVE_COUNT;
-		List<Map<String, Object>> inputMatches = new ArrayList<>();
-		
-		while(endIndex <= RETRIEVE_MAX) {
-			Map<String, Object> parameter = new HashMap<String, Object>();
-			parameter.put("beginIndex", beginIndex);
-			parameter.put("endIndex", endIndex);
-			String response = this.send(api.getMatchListsUrl(apiId), parameter);	
-			Page<LOLMatch> games = matchRepository.findRecent(apiId, PageRequest.of(0, endIndex));	
-			
-			Map<String, Object> responseMap = mapper.readValue(response, Map.class);
-			List<Map<String, Object>> responseMatches = (List<Map<String, Object>>) responseMap.get("matches");
+	public LOLMatch retrieveMatchDetail(LOLMatch match, String accountId) throws JsonMappingException, JsonProcessingException{			
+		String response = this.send(api.getMatchesUrl(match.getGameId().toString()), null);
 
-			for (Map<String, Object> map : responseMatches) {
-				Long gameId = PondUtils.getLong(map,"gameId");		
-				if(games.get().parallel().anyMatch(m-> m.getGameId().equals(gameId))) {
-					return inputMatches;
-				}
-				inputMatches.add(map);
-			}
-			beginIndex = endIndex;
-			endIndex += RETRIEVE_COUNT;
-		}
-		
-		return inputMatches;
-	}
-	
-	@Transactional
-	private void fillDetail(LOLMatch lolMatch) throws JsonMappingException, JsonProcessingException {		
-		String response = this.send(api.getMatchesUrl(lolMatch.getGameId().toString()), null);	
 		Map<String, Object> matchDetail = mapper.readValue(response, Map.class);
+		List<Map<String, Object>> responseMatches = (List<Map<String, Object>>) matchDetail.get("matches");
 		
-		for (LOLParticipant participant : lolMatch.getParticipants()) {
-			int participantId = 
-					this.parseParticipantId((List<Map<String, Object>>) matchDetail.get("participantIdentities"), participant.getAccountId());
-			Map<String, Object> participantData = 
-					this.parsetParticipant((List<Map<String, Object>>) matchDetail.get("participants"), participantId);
-			String win = 
-					this.parseWin((List<Map<String, Object>>) matchDetail.get("teams"), PondUtils.getInteger(participantData,"teamId"));
-			Map<String, Object> stats = (Map<String, Object>) participantData.get("stats");				
-			participant.setKills(PondUtils.getLong(stats,"kills"));
-			participant.setDeaths(PondUtils.getLong(stats,"assists"));
-			participant.setAssists(PondUtils.getLong(stats,"deaths"));
-			participant.setSpell1(PondUtils.getLong(participantData,"spell1Id"));
-			participant.setSpell2(PondUtils.getLong(participantData,"spell2Id"));
-			participant.setWin(win);
-			participant.setGame(lolMatch);
-			
-			participantRepository.save(participant);
-		}
-				
-		lolMatch.setGameMode(PondUtils.getString(matchDetail,"gameMode"));
-		lolMatch.setGameType(PondUtils.getString(matchDetail,"gameType"));
-		lolMatch.setGameCreation(PondUtils.longToDateTime(PondUtils.getLong(matchDetail,"gameCreation")));		
-		lolMatch.setGameDuration(PondUtils.longToTime(PondUtils.getLong(matchDetail,"gameDuration")));			
-		lolMatch.setGameVersion(PondUtils.getString(matchDetail,"gameVersion"));
-		lolMatch.setMapId(PondUtils.getLong(matchDetail,"mapId"));
-			
-	}
-	
-	private String parseWin(List<Map<String, Object>> teams, int teamId) {
-		for (Map<String, Object> team : teams) {
-			if(teamId == PondUtils.getInteger(team,"teamId")){
-				return PondUtils.getString(team,"win");
-			}
-		}
-		return "";
-	}
-	
-	private Map<String, Object> parsetParticipant(List<Map<String, Object>> participants, int participantId) {
-		for (Map<String, Object> participant : participants) {
-			if(participantId == PondUtils.getInteger(participant,"participantId")){
-				return participant;
-			}
-		}
-		return null;
+		int participantId = 
+				this.getParticipantIdByAccountId((List<Map<String, Object>>) matchDetail.get("participantIdentities"), accountId);
+		
+		Map<String, Object> participantData = 
+				this.getParticipantByParticipantId((List<Map<String, Object>>) matchDetail.get("participants"), participantId);		
+		String win = 
+				this.getWinByTeamId((List<Map<String, Object>>) matchDetail.get("teams"), PondUtils.getInteger(participantData,"teamId"));
+		
+		Map<String, Object> stats = (Map<String, Object>) participantData.get("stats");				
+		
+		Map<String, Object> timeLine = (Map<String, Object>) participantData.get("stats");
+		
+		LOLParticipant participant = LOLParticipant.builder()
+				.accountId(accountId)
+				.role(PondUtils.getString(timeLine,"role"))
+				.lane(PondUtils.getString(timeLine,"lane"))
+				.championId(PondUtils.getLong(participantData,"championId"))
+				.kills(PondUtils.getLong(stats,"kills"))
+				.deaths(PondUtils.getLong(stats,"assists"))
+				.assists(PondUtils.getLong(stats,"deaths"))
+				.spell1(PondUtils.getLong(participantData,"spell1Id"))
+				.spell2(PondUtils.getLong(participantData,"spell2Id"))
+				.win(win)
+				.build();
+						
+		match.setGameMode(PondUtils.getString(matchDetail,"gameMode"));
+		match.setGameType(PondUtils.getString(matchDetail,"gameType"));
+		match.setGameCreation(PondUtils.longToDateTime(PondUtils.getLong(matchDetail,"gameCreation")));		
+		match.setGameDuration(PondUtils.longToTime(PondUtils.getLong(matchDetail,"gameDuration")));			
+		match.setGameVersion(PondUtils.getString(matchDetail,"gameVersion"));
+		match.setMapId(PondUtils.getLong(matchDetail,"mapId"));
+		match.addParticipants(participant);
+		
+		return match;
 	}
 
-	private int parseParticipantId(List<Map<String, Object>> participantIdentities, String accountId) {
-		for (Map<String, Object> user : participantIdentities) {
-			Map<String, Object> player = (Map<String, Object>) user.get("player");
-			if(accountId.equals(PondUtils.getString(player,"accountId"))) {
-				return PondUtils.getInteger(user,"participantId");				
-			}
-		}
-		
-		return 0;
-	}
-	
-	private String getParticipants(String apiId, Map<String, Object> parameters) {
-		return this.send(api.getMatchesUrl(apiId), parameters);		
-	}
-	
 	private String send(String url, Map<String, Object> parameters){
 		RestUtil restUtil = new RestUtil() {			
 			@Override
@@ -226,6 +145,35 @@ public class LOLDataCollector{
 			}
 		};
 		return restUtil.send(url, parameters);
+	}
+
+	private String getWinByTeamId(List<Map<String, Object>> teams, int teamId) {
+		for (Map<String, Object> team : teams) {
+			if(teamId == PondUtils.getInteger(team,"teamId")){
+				return PondUtils.getString(team,"win");
+			}
+		}
+		return "";
+	}
+	
+	private int getParticipantIdByAccountId(List<Map<String, Object>> participantIdentities, String accountId) {
+		for (Map<String, Object> user : participantIdentities) {
+			Map<String, Object> player = (Map<String, Object>) user.get("player");
+			if(accountId.equals(PondUtils.getString(player,"accountId"))) {
+				return PondUtils.getInteger(user,"participantId");				
+			}
+		}
+		
+		return 0;
+	}
+
+	private Map<String, Object> getParticipantByParticipantId(List<Map<String, Object>> participants, int participantId) {
+		for (Map<String, Object> participant : participants) {
+			if(participantId == PondUtils.getInteger(participant,"participantId")){
+				return participant;
+			}
+		}
+		return null;
 	}
 
 }

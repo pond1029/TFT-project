@@ -22,7 +22,7 @@ import com.jylee.tft.statistic.domain.Account;
 
 public interface DataManager {
 	
-	public abstract void initAccount(Account account);
+	public abstract void initAccount(Account account) throws Exception;
 	
-	public abstract void update(Account account);
+	public abstract void update(Account account) throws Exception;
 }

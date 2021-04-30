@@ -44,7 +44,7 @@ public class SummonerImpl{
 	}
 	
 	public Summoner getSummoner(RiotAccount account) {
-		Optional<Summoner> user = this.findByNameAndType(account.getAccountId(), account.getAccountType());	
+		Optional<Summoner> user = this.findByNameAndType(account.getAccountName(), account.getAccountType());	
 		Summoner summoner = user.get();
 		return summoner;
 	}

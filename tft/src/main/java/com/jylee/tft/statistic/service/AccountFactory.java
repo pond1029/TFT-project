@@ -28,25 +28,25 @@ import com.jylee.tft.statistic.domain.TFTAccount;
 @Component
 public class AccountFactory {
 	
-	public static Account getAccount(String accountId, AccountType accountType) {
+	public static Account getAccount(String accountName, AccountType accountType) {
 
 		if(AccountType.TFT.equals(accountType)) {
-			return new TFTAccount(accountId, accountType);
+			return new TFTAccount(accountName, accountType);
 		}
 		if(AccountType.LOL.equals(accountType)) {
-			return new LOLAccount(accountId, accountType);
+			return new LOLAccount(accountName, accountType);
 		}
 		
 		return null;
 	}
 	
-	public static  Account getAccount(String accountId, String accountType) {
+	public static  Account getAccount(String accountName, String accountType) {
 		
 		if("TFT".equals(accountType)) {
-			return new TFTAccount(accountId, AccountType.valueOf(accountType));
+			return new TFTAccount(accountName, AccountType.valueOf(accountType));
 		}
 		if("LOL".equals(accountType)) {
-			return new LOLAccount(accountId, AccountType.valueOf(accountType));
+			return new LOLAccount(accountName, AccountType.valueOf(accountType));
 		}
 		
 		return null;

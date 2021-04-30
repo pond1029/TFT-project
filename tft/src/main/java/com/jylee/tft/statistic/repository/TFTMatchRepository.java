@@ -36,4 +36,5 @@ public interface TFTMatchRepository extends JpaRepository<TFTMatch, Long>{
 	
 	@Query("SELECT m FROM TFTMatch m LEFT JOIN m.participants TFTParticipant WHERE TFTParticipant.puuid = :puuid ORDER BY m.gameDatetime DESC")
 	public abstract Page<TFTMatch> findRecent(@Param("puuid")String puuid,Pageable pageable);
+
 }

@@ -20,8 +20,8 @@ package com.jylee.tft.statistic.domain;
 
 public abstract class RiotAccount extends Account{
 
-	public RiotAccount(String accountId, AccountType accountType) {
-		super(accountId, accountType);
+	public RiotAccount(String accountName, AccountType accountType) {
+		super(accountName, accountType);
 	}
 
 }

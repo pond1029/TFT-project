@@ -39,6 +39,7 @@ public class LOLParticipant {
 	private Long lolParticipantId;
 	private String accountId;
 	private String lane;
+	private Long championId;
 	private String role;
 	private String win;
 	private Long spell1;
