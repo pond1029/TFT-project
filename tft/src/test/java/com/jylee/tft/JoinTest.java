@@ -27,8 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jylee.tft.user.domain.SiteUser;
-import com.jylee.tft.user.repository.SiteUserRepository;
+import com.jylee.tft.modules.siteuser.domain.SiteUser;
+import com.jylee.tft.modules.siteuser.repository.SiteUserRepository;
 /**
   * @Package : com.jylee.tft
   * @FileName : joinTest.java

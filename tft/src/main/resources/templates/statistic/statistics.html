@@ -18,15 +18,17 @@
 									th:value="${accountType}"
 									th:text="${accountType.fullName}"></option>
 						</select>				
-						<input type="text" class="form-control col" name="accountId" placeholder="accountId" aria-label="Search">
+						<input type="text" class="form-control col" name="accountName" placeholder="accountName" aria-label="Search">
+						<input type="date" class="form-control col" name="from" aria-label="Search"/>
+						<input type="date" class="form-control col" name="to" aria-label="Search"/>
 						<button class="btn btn-outline-secondary col-sm" type="submit">Search</button>
 				</div>
 			</div>    		
 		</form>
-		
-		<div id="statistics" th:if="${accountId}">
+</div>
+		<div id="statistics" th:if="${accountName}">
 			<div id="summery">
-				<h1 id="accountId" th:text="${accountId}"></h1>
+				<h1 id="accountName" th:text="${accountName}"></h1>
 				<button id="update">update</button>		
 			</div>
 					

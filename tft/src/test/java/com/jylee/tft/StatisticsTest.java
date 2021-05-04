@@ -9,18 +9,19 @@
 
 package com.jylee.tft;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.jylee.tft.statistic.domain.Account;
-import com.jylee.tft.statistic.domain.Period;
-import com.jylee.tft.statistic.service.AccountFactory;
-import com.jylee.tft.statistic.service.AccountVisitor;
-import com.jylee.tft.statistic.service.AccountVisitorImpl;
-import com.jylee.tft.statistic.service.PeriodStatistics;
+import com.jylee.tft.modules.account.domain.Account;
+import com.jylee.tft.modules.account.service.AccountFactory;
+import com.jylee.tft.modules.account.service.AccountVisitor;
+import com.jylee.tft.modules.account.service.AccountVisitorImpl;
+import com.jylee.tft.modules.statistic.domain.Period;
+import com.jylee.tft.modules.statistic.service.PeriodStatistics;
 
 /**
   * @Package : com.jylee.tft
@@ -36,20 +37,22 @@ public class StatisticsTest {
 	
 	@Autowired
 	AccountVisitorImpl accountVisitor = new AccountVisitorImpl();
-	
+		
 	@Disabled
 	@Test
 	@DisplayName("TFT 조회")
 	public void tftPlaytimeSearch() {
+		Period p = new Period(2021,02);
 		Account account = AccountFactory.getAccount("야 방금 무빙봤냐", "TFT");
-		account.getPlayTimes(accountVisitor, new Period(2021,02));		
+		account.getPlayTimes(accountVisitor, p.getFrom(), p.getTo());		
 	}
 
 	@Test
 	@DisplayName("LOL 조회")
 	public void lolPlaytimeSearch() {
+		Period p = new Period(2020,12);
 		Account account = AccountFactory.getAccount("야 방금 무빙봤냐", "LOL");
-		account.getPlayTimes(accountVisitor, new Period(2020,12));		
+		account.getPlayTimes(accountVisitor, p.getFrom(), p.getTo());		
 	}
 	
 }
