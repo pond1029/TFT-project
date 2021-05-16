@@ -36,7 +36,7 @@ import com.jylee.tft.modules.statistic.service.PeriodStatistics;
 public class StatisticsTest {
 	
 	@Autowired
-	AccountVisitorImpl accountVisitor = new AccountVisitorImpl();
+	AccountVisitorImpl accountVisitor;
 		
 	@Disabled
 	@Test

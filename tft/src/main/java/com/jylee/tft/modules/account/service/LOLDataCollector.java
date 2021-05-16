@@ -43,8 +43,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LOLDataCollector{
 	
-	private static final int RETRIEVE_COUNT = 10;
-	private static final int RETRIEVE_MAX = 50;
+	private static final int RETRIEVE_COUNT = 5;
 	private final LOLAPIInformation api;		
 	private final ObjectMapper mapper = new ObjectMapper();
 	

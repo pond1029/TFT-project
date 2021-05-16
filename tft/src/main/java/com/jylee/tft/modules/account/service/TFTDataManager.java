@@ -15,6 +15,8 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -64,11 +66,11 @@ public class TFTDataManager extends RiotDataManager{
 		
 		List<TFTMatch> matches= dataCollector.retrieveMatches(summoner.getPuuid());
 		
-		//TODO TFT account의 가장 최근 데이터 조회
-		//TFTMatch recentMatch = matchRepository.getRecent();
-				
+		Page<TFTMatch> recentMatch = matchRepository.findRecent(summoner.getPuuid(), PageRequest.of(0, 1));
+		TFTMatch mostRecentMatch = recentMatch.getContent().get(0);		
+		
 		for(TFTMatch match : matches) {
-			//if(match.getMatchId().equals(recentMatch.getMatchId())) break;
+			if(mostRecentMatch != null && match.getMatchId().equals(mostRecentMatch.getMatchId())) break;
 			matchLists.add(dataCollector.retrieveMatchDetail(match, summoner.getPuuid()));			
 		}
 		

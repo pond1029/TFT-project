@@ -76,7 +76,7 @@ public class Period implements StatisticCondition{
 	}
 
 	public Period(String stringFrom, String stringTo) {
-			this.from = LocalDateTime.parse(stringFrom, DateTimeFormatter.ISO_DATE);
-			this.to = LocalDateTime.parse(stringTo, DateTimeFormatter.ISO_DATE);
+			this.from = LocalDateTime.parse(stringFrom, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+			this.to = LocalDateTime.parse(stringTo, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 	}
 }

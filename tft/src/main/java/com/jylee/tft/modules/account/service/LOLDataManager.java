@@ -15,6 +15,8 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -64,11 +66,11 @@ public class LOLDataManager extends RiotDataManager{
 		
 		List<LOLMatch> matches = dataCollector.retrieveMatches(summoner.getAccountId());		
 
-		//TODO LOL account의 가장 최근 데이터 조회
-		//LOLMatch recentMatch = matchRepository.getRecent();
+		Page<LOLMatch> recentMatch = matchRepository.findRecent(summoner.getAccountId(), PageRequest.of(0, 1));
+		LOLMatch mostRecentMatch = recentMatch.getContent().get(0);
 		
 		for (LOLMatch match : matches) {
-			//if(match.getGameId().equals(recentMatch.getGameId())) break;
+			if(mostRecentMatch != null && match.getGameId().equals(mostRecentMatch.getGameId())) break;
 			matchLists.add(dataCollector.retrieveMatchDetail(match, summoner.getAccountId()));			
 		}		
 		

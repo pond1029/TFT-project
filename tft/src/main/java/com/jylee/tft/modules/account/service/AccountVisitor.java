@@ -29,6 +29,8 @@ import com.jylee.tft.modules.statistic.domain.Period;
 public interface AccountVisitor {
 
 	public abstract List<PlayTime> getPlayTimes(TFTAccount account, LocalDateTime from, LocalDateTime to);
-	public abstract List<PlayTime> getPlayTimes(LOLAccount account, LocalDateTime from, LocalDateTime to);
+	public abstract void update(TFTAccount account);
 	
+	public abstract List<PlayTime> getPlayTimes(LOLAccount account, LocalDateTime from, LocalDateTime to);
+	public abstract void update(LOLAccount account);
 }

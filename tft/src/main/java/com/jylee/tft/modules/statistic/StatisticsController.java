@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.jylee.tft.modules.account.domain.Account;
 import com.jylee.tft.modules.account.domain.AccountType;
@@ -53,7 +54,8 @@ public class StatisticsController {
 		
 		model.addAttribute("figure", figure);
 		model.addAttribute("accountName", accountName);
-		model.addAttribute("accountType", AccountType.valueOf(accountType).getFullName());
+		model.addAttribute("accountType", AccountType.valueOf(accountType));
+		model.addAttribute("accountTypeFullName", AccountType.valueOf(accountType).getFullName());
 		model.addAttribute("from", from);
 		model.addAttribute("from", to);
 		

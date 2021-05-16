@@ -36,6 +36,8 @@ public abstract class Account {
 
 	public abstract List<PlayTime> getPlayTimes(AccountVisitor visitor, LocalDateTime from, LocalDateTime to);
 
+	public abstract void update(AccountVisitor visitor);
+	
 	public String getAccountName() {
 		return this.accountName;
 	}

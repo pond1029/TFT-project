@@ -42,8 +42,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TFTDataCollector{
 	
-	private static final int RETRIEVE_MAX = 100;
-	private static final int RETRIEVE_COUNT = 20;
+	private static final int RETRIEVE_COUNT = 5;
 	private final ObjectMapper mapper = new ObjectMapper();
 	private final TFTAPIInformation api;
 		

@@ -3,44 +3,54 @@
 <head th:replace="fragments.html :: head"></head>
 <meta charset="UTF-8">
 <title>Statistics</title>
-    <script src="/node_modules/chart.js/dist/Chart.bundle.min.js"></script>
+<script src="/node_modules/chart.js/dist/Chart.bundle.min.js"></script>
 </head>
-<body class = "bg-light">
-    <div th:replace="fragments.html :: main-nav"></div>
-    
-	<div class="container">   
+<body class="bg-light">
+	<div th:replace="fragments.html :: main-nav"></div>
+
+	<div class="container">
 		<form th:action="@{/statistics/figure}" method="get">
-		    <div class="row">    
+			<div class="row">
 				<div class="input-group">
-						<select class="form-select col" name="accountType" aria-label="Search">
-							<option selected value="">Choose</option>
-							<option th:each="accountType : ${accountTypes}" 
-									th:value="${accountType}"
-									th:text="${accountType.fullName}"></option>
-						</select>				
-						<input type="text" class="form-control col" name="accountName" placeholder="accountName" aria-label="Search">
-						<input type="date" class="form-control col" name="from" aria-label="Search"/>
-						<input type="date" class="form-control col" name="to" aria-label="Search"/>
-						<button class="btn btn-outline-secondary col-sm" type="submit">Search</button>
+					<select class="form-select col" name="accountType"
+						aria-label="Search">
+						<option selected value="">Choose</option>
+						<option th:each="accountType : ${accountTypes}"
+							th:value="${accountType}" th:text="${accountType.fullName}"></option>
+					</select> <input type="text" class="form-control col" name="accountName"
+						placeholder="accountName" aria-label="Search"> <input
+						type="datetime-local" class="form-control col" name="from"
+						aria-label="Search" /> <input type="datetime-local"
+						class="form-control col" name="to" aria-label="Search" />
+					<button class="btn btn-outline-secondary col-sm" type="submit">Search</button>
 				</div>
-			</div>    		
-		</form>
-</div>
-		<div id="statistics" th:if="${accountName}">
-			<div id="summery">
-				<h1 id="accountName" th:text="${accountName}"></h1>
-				<button id="update">update</button>		
 			</div>
-					
-			<div id="chartContainer" class="chart-container" style="position:relative; height:70vh; width:70vw;">
-				<canvas id="chart"></canvas>	
-			</div>	
-		</div>
-		
-		<div class="fragments.html :: footer"></div>	
+		</form>
 	</div>
+	<div id="statistics" th:if="${accountName}">
+		<div id="summery">
+			<h1 id="accountName" th:text="${accountName}"></h1>
+			<h1 id="accountTypeFullName" th:text="${accountTypeFullName}"></h1>
+			<form th:action="@{/account/update}" method="post">
+				<input type="text" id="accountName" th:value="${accountName}">
+				<input type="text" id="accountType" th:value="${accountType}">
+				<button type="submit" id="update">update</button>
+			</form>
+		</div>
+
+		<div id="chartContainer" class="chart-container"
+			style="position: relative; height: 70vh; width: 70vw;">
+			<canvas id="chart"></canvas>
+		</div>
+	</div>
+
+	<div class="fragments.html :: footer"></div>
+
+	<script type="application/javascript">
 	
-	<script th:inline="javascript">
+	</script>
+
+	<script type="application/javascript">
 
 		var figure = [[${figure}]];
 		

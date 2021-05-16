@@ -35,5 +35,10 @@ public class LOLAccount extends RiotAccount{
 		return visitor.getPlayTimes(this, from, to);
 	}
 
+	@Override
+	public void update(AccountVisitor visitor) {
+		visitor.update(this);		
+	}
+
 
 }
