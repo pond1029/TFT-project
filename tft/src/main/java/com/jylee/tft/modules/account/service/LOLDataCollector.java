@@ -41,15 +41,15 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class LOLDataCollector{
+public class LOLDataCollector extends RiotDataCollector{
 	
 	private static final int RETRIEVE_COUNT = 5;
 	private final LOLAPIInformation api;		
 	private final ObjectMapper mapper = new ObjectMapper();
 	
 	
-	public Summoner retrieveSummoner(String summonerName) throws JsonProcessingException{	
-		String response = this.send(api.getSummonerUrl(summonerName), null);
+	public Summoner getSummoner(String summonerName) throws JsonProcessingException{	
+		String response = this.restApiSend(api.getSummonerUrl(summonerName), null);
 		
 		Map<String, Object> responseMap =  mapper.readValue(response, Map.class);
 		
@@ -67,14 +67,14 @@ public class LOLDataCollector{
 		return summoner;
 	}
 		
-	public List<LOLMatch> retrieveMatches(String accountId) throws JsonMappingException, JsonProcessingException {
+	public List<LOLMatch> getMatches(String accountId) throws JsonMappingException, JsonProcessingException {
 		List<LOLMatch> matchList = new ArrayList<LOLMatch>();
 
 		Map<String, Object> parameter = new HashMap<String, Object>();		
 		parameter.put("beginIndex", 0);
 		parameter.put("endIndex", RETRIEVE_COUNT);
 		
-		String response = this.send(api.getMatchListsUrl(accountId), parameter);	
+		String response = this.restApiSend(api.getMatchListsUrl(accountId), parameter);	
 		
 		Map<String, Object> responseMap = mapper.readValue(response, Map.class);
 		List<Map<String, Object>> responseMatches = (List<Map<String, Object>>) responseMap.get("matches");
@@ -90,8 +90,8 @@ public class LOLDataCollector{
 		return matchList;
 	}
 	
-	public LOLMatch retrieveMatchDetail(LOLMatch match, String accountId) throws JsonMappingException, JsonProcessingException{			
-		String response = this.send(api.getMatchesUrl(match.getGameId().toString()), null);
+	public LOLMatch getMatchDetail(LOLMatch match, String accountId) throws JsonMappingException, JsonProcessingException{			
+		String response = this.restApiSend(api.getMatchesUrl(match.getGameId().toString()), null);
 
 		Map<String, Object> matchDetail = mapper.readValue(response, Map.class);
 		List<Map<String, Object>> responseMatches = (List<Map<String, Object>>) matchDetail.get("matches");
@@ -132,7 +132,7 @@ public class LOLDataCollector{
 		return match;
 	}
 
-	private String send(String url, Map<String, Object> parameters){
+	private String restApiSend(String url, Map<String, Object> parameters){
 		RestUtil restUtil = new RestUtil() {			
 			@Override
 			public HttpHeaders getHeader() {

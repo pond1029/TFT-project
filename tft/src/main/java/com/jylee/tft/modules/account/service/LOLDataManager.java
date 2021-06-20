@@ -48,7 +48,7 @@ public class LOLDataManager extends RiotDataManager{
 
 	@Override
 	public void initAccount(Account account) throws JsonProcessingException {
-		Summoner summoner = dataCollector.retrieveSummoner(account.getAccountName());
+		Summoner summoner = dataCollector.getSummoner(account.getAccountName());
 		summonerRepository.save(summoner);		
 	}
 	
@@ -64,14 +64,14 @@ public class LOLDataManager extends RiotDataManager{
 			summoner = summonerRepository.getSummoner((RiotAccount) account);
 		}
 		
-		List<LOLMatch> matches = dataCollector.retrieveMatches(summoner.getAccountId());		
+		List<LOLMatch> matches = dataCollector.getMatches(summoner.getAccountId());		
 
 		Page<LOLMatch> recentMatch = matchRepository.findRecent(summoner.getAccountId(), PageRequest.of(0, 1));
 		LOLMatch mostRecentMatch = recentMatch.getContent().get(0);
 		
 		for (LOLMatch match : matches) {
 			if(mostRecentMatch != null && match.getGameId().equals(mostRecentMatch.getGameId())) break;
-			matchLists.add(dataCollector.retrieveMatchDetail(match, summoner.getAccountId()));			
+			matchLists.add(dataCollector.getMatchDetail(match, summoner.getAccountId()));			
 		}		
 		
 		matchRepository.saveAll(matchLists);

@@ -40,14 +40,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class TFTDataCollector{
+public class TFTDataCollector extends RiotDataCollector{
 	
 	private static final int RETRIEVE_COUNT = 5;
 	private final ObjectMapper mapper = new ObjectMapper();
 	private final TFTAPIInformation api;
 		
-	public Summoner retrieveSummoner(String summonerName) throws JsonProcessingException{	
-		String response = this.send(api.getSummonerUrl(summonerName), null);
+	public Summoner getSummoner(String summonerName) throws JsonProcessingException{	
+		String response = this.restApiSend(api.getSummonerUrl(summonerName), null);
 		
 		Map<String, Object> responseMap = mapper.readValue(response, Map.class);
 		
@@ -65,15 +65,14 @@ public class TFTDataCollector{
 		return summoner;
 	}
 
-	
-	public List<TFTMatch> retrieveMatches(String puuid) throws JsonMappingException, JsonProcessingException {
+	public List<TFTMatch> getMatches(String puuid) throws JsonMappingException, JsonProcessingException {
 		List<TFTMatch> matchList = new ArrayList<TFTMatch>();
 
 		Map<String, Object> parameter = new HashMap<String, Object>();		
 		int count = RETRIEVE_COUNT;					
 		parameter.put("count",count);
 		
-		String response = this.send(api.getMatchIdsUrl(puuid), parameter);		
+		String response = this.restApiSend(api.getMatchIdsUrl(puuid), parameter);		
 		String[] responseMatchIds = mapper.readValue(response, String[].class);						
 		
 		for(String matchId : responseMatchIds) {
@@ -85,8 +84,8 @@ public class TFTDataCollector{
 		return matchList;
 	}
 	
-	public TFTMatch retrieveMatchDetail(TFTMatch match, String puuid) throws JsonMappingException, JsonProcessingException {
-		String response = this.send(api.getMatchesUrl(match.getMatchId()), null);	
+	public TFTMatch getMatchDetail(TFTMatch match, String puuid) throws JsonMappingException, JsonProcessingException {
+		String response = this.restApiSend(api.getMatchesUrl(match.getMatchId()), null);	
 				
 		Map<String, Object> matchDetail = mapper.readValue(response, Map.class);
 		Map<String, Object> metadata = (Map<String, Object>) matchDetail.get("metadata");
@@ -115,7 +114,7 @@ public class TFTDataCollector{
 		return match;					
 	}
 
-	private String send(String url, Map<String, Object> parameters){
+	private String restApiSend(String url, Map<String, Object> parameters){
 		RestUtil restUtil = new RestUtil() {			
 			@Override
 			public HttpHeaders getHeader() {
