@@ -9,6 +9,10 @@
 
 package com.jylee.tft.modules.statistic;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,19 +51,21 @@ public class StatisticsController {
 	}
 	
 	@GetMapping("/statistics/figure")
-	public String searchStatistics(String accountName, String accountType, String from, String to, Model model) {
+	public ResponseEntity<Map> searchStatistics(String accountName, String accountType, String from, String to) {
+		Map<String, Object> responseMessage = new HashMap();
+		
+		if(accountName == "" || accountName == null || accountType == "" || accountType == null ||
+				from == "" || from == null || to == "" || to == null) {
+			responseMessage.put("error","데이터가 없습니다.");
+			return ResponseEntity.badRequest().body(responseMessage);
+		}
 		
 		Period period = new Period(from, to);
 		Figure figure = periodStatisticsService.getFigure(AccountFactory.getAccount(accountName, accountType), period);
 		
-		model.addAttribute("figure", figure);
-		model.addAttribute("accountName", accountName);
-		model.addAttribute("accountType", AccountType.valueOf(accountType));
-		model.addAttribute("accountTypeFullName", AccountType.valueOf(accountType).getFullName());
-		model.addAttribute("from", from);
-		model.addAttribute("from", to);
+		responseMessage.put("figure", figure);
 		
-		return "statistic/statistics";
+		return ResponseEntity.ok().body(responseMessage);
 	}
 	
 	

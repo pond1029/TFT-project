@@ -9,24 +9,24 @@
 	<div th:replace="fragments.html :: main-nav"></div>
 
 	<div class="container">
-		<form th:action="@{/statistics/figure}" method="get">
-			<div class="row">
-				<div class="input-group">
-					<select class="form-select col" name="accountType"
-						aria-label="Search">
-						<option selected value="">Choose</option>
-						<option th:each="accountType : ${accountTypes}"
-							th:value="${accountType}" th:text="${accountType.fullName}"></option>
-					</select> <input type="text" class="form-control col" name="accountName"
-						placeholder="accountName" aria-label="Search"> <input
-						type="datetime-local" class="form-control col" name="from"
-						aria-label="Search" /> <input type="datetime-local"
-						class="form-control col" name="to" aria-label="Search" />
-					<button class="btn btn-outline-secondary col-sm" type="submit">Search</button>
-				</div>
+		<div class="row">
+			<div class="input-group">
+				<select class="col" id="accountType"
+					aria-label="Search">
+					<option selected value="">Choose</option>
+					<option th:each="accountType : ${accountTypes}"	
+					th:value="${accountType}" th:text="${accountType.fullName}"></option>
+				</select> 				
+				<input type="text" class="col" id="accountName" aria-label="Search" placeholder="accountName"> 					
+				<input type="datetime-local" class="col" id="from" aria-label="Search" /> 					
+				<input type="datetime-local" class="col" id="to" aria-label="Search" />
+					
+				<button class="btn btn-outline-secondary col-sm" type="button" onclick="search()">Search</button>
 			</div>
-		</form>
+		</div>
+		<div id="errorMessage"></div>
 	</div>
+	
 	<div id="statistics" th:if="${accountName}">
 		<div id="summery">
 			<h1 id="accountName" th:text="${accountName}"></h1>
@@ -50,31 +50,65 @@
 	
 	</script>
 
-	<script type="application/javascript">
+	<script type="application/javascript">				
+		function search(){
+			var from = document.getElementById('from').value;
+			var to = document.getElementById('to').value;
+			var accountType = document.getElementById('accountType').value;
+			var accountName =  document.getElementById('accountName').value;
+			
+			var errorMessage = document.getElementById('errorMessage');
+			errorMessage.innerHTML = '';
+			
+			var url = location.origin + '/statistics/figure?' + 
+					'from=' + from + 
+					'&to=' + to + 
+					'&accountType=' + accountType + 
+					'&accountName=' + accountName;
+			
+			fetch(url)
+				.then((response) => {
+					if (!response.ok){
+			            response.json().then(data =>{
+			            	errorMessage.innerHTML = data.error;			            	
+			            })	
+			            throw new Error('HTTP status' + response.status);
+					}
+		            return response.json();
+				})
+			    .then(response => {
+					//그래프 그리기
+			    	drawChart(response.figure);
+			    })			    
+			    .catch(error => {
+			    	
+			    });						
+    	}    	
 
-		var figure = [[${figure}]];
-		
-		var ctx = document.getElementById('chart');
-		var myChart = new Chart(ctx, {
-		    type: 'bar',
-		    data: {
-		    	labels: figure.labels,
-		        datasets: [{
-		            label: 'Seconds',
-		            data: figure.datas,
-		            borderWidth: 1
-		        }]
-		    },
-		    options: {
-		        scales: {
-		            yAxes: [{
-		                ticks: {
-		                    beginAtZero: true
-		                }
-		            }]
-		        }
-		    }
-		});
+		function drawChart(figure){
+			var ctx = document.getElementById('chart');
+			
+			var myChart = new Chart(ctx, {
+			    type: 'bar',
+			    data: {
+			    	labels: figure.labels,
+			        datasets: [{
+			            label: 'Seconds',
+			            data: figure.datas,
+			            borderWidth: 1
+			        }]
+			    },
+			    options: {
+			        scales: {
+			            yAxes: [{
+			                ticks: {
+			                    beginAtZero: true
+			                }
+			            }]
+			        }
+			    }
+			});
+		}
 	</script>
 </body>
 </html>
