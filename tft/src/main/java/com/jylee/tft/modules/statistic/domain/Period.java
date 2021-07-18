@@ -15,8 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

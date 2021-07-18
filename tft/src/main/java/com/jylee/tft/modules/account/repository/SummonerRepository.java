@@ -29,6 +29,6 @@ public interface SummonerRepository extends JpaRepository<Summoner, Long>{
 	
 	public abstract Summoner save(Summoner summoner);
 	
-	public abstract Optional<Summoner> findByNameAndType(String name,AccountType type);
+	public abstract Summoner findByNameAndType(String name, AccountType type);
 	
 }

@@ -11,6 +11,7 @@ package com.jylee.tft.modules.account;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.jylee.tft.modules.account.domain.Account;
@@ -34,11 +35,11 @@ public class AccountController {
 
 	private final AccountVisitorImpl visitor;	
 	
-	@PostMapping("/account/update")
-	public String updateAccount() {
-//
-//		Account account = (AccountFactory.getAccount(accountName, accountType));
-//		account.update(visitor);
+	@GetMapping("/account/update")
+	public String updateAccount(String accountName, String accountType) {
+
+		Account account = (AccountFactory.getAccount(accountName, accountType));
+		account.update(visitor);
 		
 		return "redirect:/";
 	}

@@ -61,9 +61,11 @@ public class StatisticsController {
 		}
 		
 		Period period = new Period(from, to);
-		Figure figure = periodStatisticsService.getFigure(AccountFactory.getAccount(accountName, accountType), period);
+		Account searchAccount = AccountFactory.getAccount(accountName, accountType);
+		Figure figure = periodStatisticsService.getFigure(searchAccount, period);
 		
 		responseMessage.put("figure", figure);
+		responseMessage.put("account", searchAccount);
 		
 		return ResponseEntity.ok().body(responseMessage);
 	}

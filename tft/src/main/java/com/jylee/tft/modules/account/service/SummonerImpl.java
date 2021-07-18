@@ -39,13 +39,12 @@ public class SummonerImpl{
 		return summonerRepository.save(summoner);
 	}
 	
-	public Optional<Summoner> findByNameAndType(String name,AccountType type) {
+	public Summoner findByNameAndType(String name,AccountType type) {
 		return summonerRepository.findByNameAndType(name, type);
 	}
 	
 	public Summoner getSummoner(RiotAccount account) {
-		Optional<Summoner> user = this.findByNameAndType(account.getAccountName(), account.getAccountType());	
-		Summoner summoner = (user.isEmpty()) ? null : user.get();
+		Summoner summoner = summonerRepository.findByNameAndType(account.getAccountName(), account.getAccountType());	
 		return summoner;
 	}
 	

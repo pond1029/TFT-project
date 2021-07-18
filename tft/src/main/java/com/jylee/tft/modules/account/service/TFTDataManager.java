@@ -47,9 +47,9 @@ public class TFTDataManager extends RiotDataManager{
 	private final  TFTParticipantRepository participantRepository;	
 
 	@Override
-	public void initAccount(Account account) throws JsonProcessingException {
+	public Object initAccount(Account account) throws JsonProcessingException {
 		Summoner summoner = dataCollector.getSummoner(account.getAccountName());
-		summonerRepository.save(summoner);		
+		return summonerRepository.save(summoner);		
 	}
 	
 	@Override
@@ -60,14 +60,17 @@ public class TFTDataManager extends RiotDataManager{
 		Summoner summoner = summonerRepository.getSummoner((RiotAccount) account);
 		
 		if(summoner == null) {
-			initAccount(account);			
-			summoner = summonerRepository.getSummoner((RiotAccount) account);
+			summoner = (Summoner) initAccount(account);
 		}
 		
 		List<TFTMatch> matches= dataCollector.getMatches(summoner.getPuuid());
 		
 		Page<TFTMatch> recentMatch = matchRepository.findRecent(summoner.getPuuid(), PageRequest.of(0, 1));
-		TFTMatch mostRecentMatch = recentMatch.getContent().get(0);		
+		TFTMatch mostRecentMatch = null;
+		
+		if(recentMatch.getTotalPages() > 0 ) {
+			mostRecentMatch = recentMatch.getContent().get(0);		
+		}
 		
 		for(TFTMatch match : matches) {
 			if(mostRecentMatch != null && match.getMatchId().equals(mostRecentMatch.getMatchId())) break;

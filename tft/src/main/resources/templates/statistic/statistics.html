@@ -27,15 +27,15 @@
 		<div id="errorMessage"></div>
 	</div>
 	
-	<div id="statistics" th:if="${accountName}">
+	<div id="statistics">
 		<div id="summery">
 			<h1 id="accountName" th:text="${accountName}"></h1>
 			<h1 id="accountTypeFullName" th:text="${accountTypeFullName}"></h1>
-			<form th:action="@{/account/update}" method="post">
-				<input type="text" id="accountName" th:value="${accountName}">
-				<input type="text" id="accountType" th:value="${accountType}">
-				<button type="submit" id="update">update</button>
-			</form>
+			
+			<span id ="searchedAccountName"> </span>
+			<span id ="searchedAccountType"> </span>
+			<button type="button" id="update" onclick="update()">update</button>
+			
 		</div>
 
 		<div id="chartContainer" class="chart-container"
@@ -79,6 +79,9 @@
 			    .then(response => {
 					//그래프 그리기
 			    	drawChart(response.figure);
+					//결과 화면 그리기
+			    	document.getElementById('searchedAccountName').innerHTML = accountName;
+			    	document.getElementById('searchedAccountType').innerHTML = accountType;
 			    })			    
 			    .catch(error => {
 			    	
@@ -86,6 +89,14 @@
     	}    	
 
 		function drawChart(figure){
+			
+			if(figure.totalData == 0){
+				var errorMessage = document.getElementById('errorMessage');
+				errorMessage.innerHTML = '';
+				errorMessage.innerHTML = '데이터가 없습니다.';
+				return;
+			}
+			
 			var ctx = document.getElementById('chart');
 			
 			var myChart = new Chart(ctx, {
@@ -108,6 +119,34 @@
 			        }
 			    }
 			});
+		}
+		
+		function update(){
+			var accountType = document.getElementById('searchedAccountType').innerHTML;
+			var accountName =  document.getElementById('searchedAccountName').innerHTML;
+			
+			var errorMessage = document.getElementById('errorMessage');
+			errorMessage.innerHTML = '';
+			
+			var url = location.origin + '/account/update?' + 
+					'accountType=' + accountType + 
+					'&accountName=' + accountName;
+			
+			fetch(url)
+				.then((response) => {
+					if (!response.ok){
+			            response.json().then(data =>{
+			            	errorMessage.innerHTML = data.error;			            	
+			            })	
+			            throw new Error('HTTP status' + response.status);
+					}
+		            return response.json();
+				})
+			    .then(response => {
+			    })			    
+			    .catch(error => {
+			    	
+			    });		
 		}
 	</script>
 </body>
